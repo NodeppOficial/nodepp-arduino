@@ -11,7 +11,7 @@ void _Ready() { console::start(9600);
             console::done(" Process 1:",itr); _Yield(1);
         }
 
-        _End
+        _Stop
     });
 
     process::loop::add([=](){ static int itr = 10;
@@ -21,7 +21,7 @@ void _Ready() { console::start(9600);
             console::error("Process 2:",itr); _Yield(1);
         }
 
-        _End
+        _Stop
     });
 
 }
