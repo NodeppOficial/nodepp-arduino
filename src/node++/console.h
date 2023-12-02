@@ -21,6 +21,7 @@ namespace nodepp { namespace console {
 
     template< class V, class... T >
     int perr( V argc, T... args ){
+        while(!Serial.is_available() ){ process::next(); }
         return Serial.write( (char*) string::format( (char*)argc, args... ) );
     }
 

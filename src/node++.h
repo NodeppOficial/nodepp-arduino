@@ -63,8 +63,7 @@ namespace nodepp { namespace process {
     
     /*─······································································─*/
 
-    template< class... T >
-    void pipe( T... args ){
+    void pipe(){
         process::start( args... );
         while( !process::empty() )
                 process::next();
