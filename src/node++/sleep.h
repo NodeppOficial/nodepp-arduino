@@ -12,21 +12,23 @@ using TIMEVAL = struct timeval;
 
 namespace nodepp { namespace process {
 
-    array_t<string_t> args; int threads = 0;
-    
-    void udelay( ulong time ){ ::delayMicroseconds( time ); }
-
-    void  delay( ulong time ){ ::delay( time ); }
-
-    void  yield(){ ::delay(0); }
-
     ulong seconds(){ return ::millis() / 1000; }
 
     ulong micros(){ return ::micros(); }
 
     ulong millis(){ return ::millis(); }
 
+}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace nodepp { namespace process {
+
+    void  delay( ulong time ){ ::delay( time ); }
+
     ulong now(){ return millis(); }
+
+    void  yield(){ ::delay(0); }
 
 }}
 
