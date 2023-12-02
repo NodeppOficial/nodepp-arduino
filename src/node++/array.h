@@ -37,7 +37,7 @@ protected:
 
     }
 
-public:
+public: array_t(){}
 
     virtual ~array_t(){  }
     
@@ -59,8 +59,6 @@ public:
         if( value == nullptr || n == 0 ){ return; } 
         buffer = ptr_t<T>( value, n );
     }
-
-    array_t() noexcept = default;
     
     /*─······································································─*/
 

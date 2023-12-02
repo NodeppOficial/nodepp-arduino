@@ -13,33 +13,12 @@ using TIMEVAL = struct timeval;
 namespace nodepp { namespace process {
 
     array_t<string_t> args; int threads = 0;
+    
+    void udelay( ulong time ){ ::delayMicroseconds( time ); }
 
-#ifndef ARDUINO
-    void delay( ulong time ){ ::usleep( time * 1000 ); } //this consume a lot of CPU
-#else
-    void delay( ulong time ){ ::delay( time ); }
-#endif
+    void  delay( ulong time ){ ::delay( time ); }
 
-#ifndef ARDUINO
-
-    ulong micros(){ 
-        TIMEVAL now; gettimeofday(&now, NULL);
-        return now.tv_sec * 1000000 + now.tv_usec;
-    }
-
-    ulong millis(){
-        TIMEVAL now; gettimeofday(&now, NULL);
-        return now.tv_sec * 1000 + now.tv_usec / 1000;
-    }
-
-    ulong seconds(){
-        TIMEVAL now; gettimeofday(&now, NULL);
-        return now.tv_sec;
-    }
-
-    ulong now(){ return millis(); }
-
-#else
+    void  yield(){ ::delay(0); }
 
     ulong seconds(){ return ::millis() / 1000; }
 
@@ -48,8 +27,6 @@ namespace nodepp { namespace process {
     ulong millis(){ return ::millis(); }
 
     ulong now(){ return millis(); }
-
-#endif
 
 }}
 

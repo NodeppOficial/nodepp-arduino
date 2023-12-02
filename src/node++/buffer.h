@@ -3,7 +3,8 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp { template< class T > class ptr_t { public:
+namespace nodepp { template< class T > class ptr_t { 
+public: ptr_t(){}
 
     virtual ~ptr_t(){ reset(); }
     
@@ -13,7 +14,6 @@ namespace nodepp { template< class T > class ptr_t { public:
     ptr_t( const ulong& n, const T& value ) noexcept { resize( n, value ); }
     ptr_t( T* value, const ulong& n ) noexcept { resize( value, n ); }
     ptr_t( const ulong& n ) noexcept { resize( n ); }
-    ptr_t() noexcept = default;
     
     /*─······································································─*/
 

@@ -10,7 +10,7 @@
 namespace nodepp { template< class V, class... T > class function_t {
 public:
    
-    function_t() : func_ptr(nullptr) {}
+    function_t() noexcept : func_ptr(nullptr) {}
     
     virtual ~function_t() noexcept = default;
     
