@@ -2,8 +2,6 @@
 
 using namespace nodepp;
 
-using namespace nodepp;
-
 _Generator( process_1 ) {
     int counter = 100;
     _Emit(){ _Start

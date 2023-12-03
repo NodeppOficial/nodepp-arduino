@@ -29,9 +29,7 @@ void _Ready() {
         timer::timeout([=](){ res(30); },10000);
     });
 
-    console::log("wait for it");
-
-    timer::delay( 5000 );
+    console::log("wait for it"); timer::delay( 5000 );
 
     console::log("third promise resolved:",rej );
 
