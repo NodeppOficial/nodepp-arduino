@@ -37,9 +37,7 @@ protected:
 
     }
 
-public: array_t(){}
-
-    virtual ~array_t(){  }
+public: array_t() noexcept {};
     
     /*─······································································─*/
 

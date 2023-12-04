@@ -3,12 +3,6 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#ifndef ARDUINO
-#include <sys/time.h>
-using TIMEVAL = struct timeval;
-#endif
-
-/*────────────────────────────────────────────────────────────────────────────*/
 
 namespace nodepp { namespace process {
 

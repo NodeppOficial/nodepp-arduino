@@ -3,11 +3,7 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp {
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-namespace string {
+namespace nodepp { namespace string {
 
     template< class U, class T >
     void map( const U& func, const T& argc ){ func( string::to_string(argc) ); }
@@ -72,11 +68,11 @@ namespace string {
         }   return result;
     }
 
-}
+}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace iterator {
+namespace nodepp { namespace iterator {
 
     template< class U, class T >
     void map( const U& func, const T& argc ){ func( argc ); }
@@ -137,10 +133,8 @@ namespace iterator {
 	    return string::join( c, argc, args... );
     }
 
-}
+}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
-
-}
 
 #endif
