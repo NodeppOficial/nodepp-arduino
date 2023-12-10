@@ -6,11 +6,11 @@
 using namespace nodepp;
 
 void _Ready() {
-    pinMode( led, OUTPUT );
+    IO::mode( led, OUTPUT );
 
     timer::interval([](){
         static bool b = 0; b=!b;
-        digitalWrite( led, b );
+        IO::digital::write( led, b );
     },1000);
 
 }

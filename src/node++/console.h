@@ -52,6 +52,9 @@ namespace nodepp { namespace console {
     template< class... T >
     int info( T... input ){ pout("\033[1;36mINFO: \033[0m"); return log(input...); }
 
+    template< class... T > 
+    void start( T... args ){ Serial.begin( args... ); }
+
     void clear(){ pout("\033c"); }
 
 }}
