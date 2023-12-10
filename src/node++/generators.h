@@ -1,33 +1,31 @@
-
-#if defined(NODEPP_STREAM) && !defined(GENERATOR_FILE)
-#define GENERATOR_FILE
+#if !defined(GENERATOR_FILE) && defined(NODEPP_STREAM)
+    #define  GENERATOR_FILE
 namespace nodepp { namespace _file_ {
 
     _Generator( read ){ public: 
 
-        ulong*   r; int c=0;
+        ulong*   r; int c;
         string_t y;
+        ulong dist;
 
     template< class T > _Emit( T* str, ulong size=CHUNK_SIZE ){
-    _Start c=0; y.clear(); r=nullptr;
+    _Start c=0; y = str->get_borrow(); str->del_borrow(); str->flush();
 
         if( !str->is_available() ){ str->close(); y.clear(); _End; } r = str->get_range();
-        if( r[1] != 0 && str->pos() < r[0] ){ str->del_borrow(); str->pos( r[0] ); }
-        if( r[1] != 0 && str->pos() >=r[1] ){ str->close(); y.clear(); _End; }
 
-        y = str->get_borrow(); str->del_borrow(); str->flush();
+        if( r[1] != 0 ){ auto pos = str->pos(); dist = r[1]-r[0];
+             if( pos < r[0] ){ str->del_borrow(); str->pos( r[0] ); }
+        else if( pos >=r[1] ){ str->close(); _End; }
+        } else { dist = size; }
 
         do{ if( !y.empty() ){ break; } if( c==-2 ){ _Next; }
-                 c = str->_read( str->get_buffer_data(), str->get_buffer_size() );
+          auto act = clamp( size, dist, str->get_buffer_size() );
+                 c = str->_read( str->get_buffer_data(), act );
         } while( c == -2 );
 
-        if( c<=0 && y.empty() ){ str->close(); } else if( c>0 ){
-            ulong act = (ulong) c; if( r[1] != 0 ) 
-                  act = min( str->pos()-r[1], act );
-            y = (string_t){ str->get_buffer_data(), act };
-        } if( !y.empty() && size < y.size() ){
-            str->set_borrow( y.splice(size,y.size()) );
-        }
+        if( c<=0 && y.empty() ){ str->close(); _End; } else if( c>0 ){
+            y+= (string_t){ str->get_buffer_data(), (ulong) c };
+        }   c = y.size();
 
     _Stop
     }};
@@ -36,20 +34,20 @@ namespace nodepp { namespace _file_ {
 
     _Generator( write ){ public:
 
-        ulong y=0; int c=-1; ulong size=0;
+        ulong    y; 
+        int      c;
+        ulong size;
         
     template< class T > _Emit( T* str, const string_t& msg ){
-    _Start c=0; y=0;
+    _Start c=0; y=0; str->flush();
 
         if(!str->is_available() || msg.empty() )
-          { str->close(); _End; } str->flush();
+          { str->close(); _End; }
 
         if( str->get_borrow().empty() ){ str->set_borrow(msg); }
 
-        size = clamp( str->get_borrow_size(), 0UL, str->get_buffer_size() );
-
-        do{ while(( c=str->_write( str->get_borrow_data(), size ))==-2 )
-                 { _Next; } if(c>0){ str->get_borrow().splice(0,c); y+=c; }
+        do{ while(( c=str->_write( str->get_borrow_data(), str->get_borrow_size() ))==-2 )
+                 { _Next; } str->get_borrow().splice(0,c); y+=c;
         }   while( c>=0 && !str->get_borrow().empty() ); 
 
                if( c<=0 ){ str->close(); _End; }
@@ -70,7 +68,7 @@ namespace nodepp { namespace _file_ {
 
         while( str->is_available() ){
         while( prs(str) == 1 ){ _Next; }
-           if( prs.y.empty() ){ break; } c=1; s += prs.y; 
+           if( prs.c<=0 ){ break; } c=1; s += prs.y; 
           for( auto x:s ){ if( x == '\n' ){ break; } c++; }
            if( c<=s.size() ){ break; }
         }      str->set_borrow(s);
@@ -85,8 +83,8 @@ namespace nodepp { namespace _file_ {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#if defined(NODEPP_ENCODE) && !defined(GENERATOR_ENCODE)
-#define GENERATOR_ENCODE 
+#if !defined(GENERATOR_ENCODE) && defined(NODEPP_ENCODE)
+    #define  GENERATOR_ENCODE 
 namespace nodepp { namespace _encode_ {
 
     _file_::write _write;
@@ -124,33 +122,33 @@ namespace nodepp { namespace _encode_ {
                 if( result == (ulong)-1 ){
 
                     if( errno == EINVAL ) {
-                            string_t message = "Input conversion stopped due to an incomplete character or shift sequence at the end of the input buffer.";
-                            _onError(inp.onError,message);
-                            _onError(out.onError,message); break;
+                        string_t message = "Input conversion stopped due to an incomplete character or shift sequence at the end of the input buffer.";
+                        _onError(inp.onError,message);
+                        _onError(out.onError,message); break;
                     }
 
                     else if( errno == EILSEQ ) {
-                            string_t message = "Input conversion stopped due to an input byte that does not belong to the input codeset.";
-                            _onError(inp.onError,message);
-                            _onError(out.onError,message); break;
+                        string_t message = "Input conversion stopped due to an input byte that does not belong to the input codeset.";
+                        _onError(inp.onError,message);
+                        _onError(out.onError,message); break;
                     }
 
                     else if( errno == E2BIG ) {
-                            string_t message = "Input conversion stopped due to lack of space in the output buffer.";
-                            _onError(inp.onError,message);
-                            _onError(out.onError,message); break;
+                        string_t message = "Input conversion stopped due to lack of space in the output buffer.";
+                        _onError(inp.onError,message);
+                        _onError(out.onError,message); break;
                     }
 
                     else if( errno == EBADF ) {
-                            string_t message = "The cd argument is not a valid open conversion descriptor";
-                            _onError(inp.onError,message);
-                            _onError(out.onError,message); break;
+                        string_t message = "The cd argument is not a valid open conversion descriptor";
+                        _onError(inp.onError,message);
+                        _onError(out.onError,message); break;
                     }
 
                     else {
-                            string_t message = "can't encode correctly";
-                            _onError(inp.onError,message);
-                            _onError(out.onError,message); break;
+                        string_t message = "can't encode correctly";
+                        _onError(inp.onError,message);
+                        _onError(out.onError,message); break;
                     }
 
                 } else {
@@ -184,28 +182,28 @@ namespace nodepp { namespace _encode_ {
                 if( result == (ulong)-1 ){
 
                     if( errno == EINVAL ) {
-                            string_t message = "Input conversion stopped due to an incomplete character or shift sequence at the end of the input buffer.";
-                            _onError(inp.onError,message); break;
+                        string_t message = "Input conversion stopped due to an incomplete character or shift sequence at the end of the input buffer.";
+                        _onError(inp.onError,message); break;
                     }
 
                     else if( errno == EILSEQ ) {
-                            string_t message = "Input conversion stopped due to an input byte that does not belong to the input codeset.";
-                            _onError(inp.onError,message); break;
+                        string_t message = "Input conversion stopped due to an input byte that does not belong to the input codeset.";
+                        _onError(inp.onError,message); break;
                     }
 
                     else if( errno == E2BIG ) {
-                            string_t message = "Input conversion stopped due to lack of space in the output buffer.";
-                            _onError(inp.onError,message); break;
+                        string_t message = "Input conversion stopped due to lack of space in the output buffer.";
+                        _onError(inp.onError,message); break;
                     }
 
                     else if( errno == EBADF ) {
-                            string_t message = "The cd argument is not a valid open conversion descriptor";
-                            _onError(inp.onError,message); break;
+                        string_t message = "The cd argument is not a valid open conversion descriptor";
+                        _onError(inp.onError,message); break;
                     }
 
                     else {
-                            string_t message = "can't encode correctly";
-                            _onError(inp.onError,message); break;
+                        string_t message = "can't encode correctly";
+                        _onError(inp.onError,message); break;
                     }
 
                 } else {
@@ -225,8 +223,8 @@ namespace nodepp { namespace _encode_ {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#if defined(NODEPP_ZLIB) && !defined(GENERATOR_ZLIB)
-#define GENERATOR_ZLIB 
+#if !defined(GENERATOR_ZLIB) && defined(NODEPP_ZLIB)
+    #define  GENERATOR_ZLIB 
 namespace nodepp { namespace _zlib_ {
 
     _Generator( inflate ){ public:
@@ -265,8 +263,8 @@ namespace nodepp { namespace _zlib_ {
 
                 if(( size=inp.get_buffer_size()-str->avail_out )>0){
                     dout = (string_t){ inp.get_buffer_data(), size };
-                    while( _write(&out,dout)==1 ){ _Next; } 
-                    inp.onData.emit(dout); continue;
+                    inp.onData.emit(dout);
+                    while( _write(&out,dout)==1 ){ _Next; } continue;
                 }
                 
                 if( x==Z_STREAM_END ) { break; } else if( x < 0 ){ 
@@ -311,7 +309,7 @@ namespace nodepp { namespace _zlib_ {
 
                 if( x==Z_STREAM_END ) { break; } else if( x < 0 ){ 
                     string_t message = string::format("ZLIB: %s",str->msg);
-                    _onError( inp.onError, message ); inp.close(); _End;
+                    _onError( inp.onError, message ); inp.close(); break;
                 } 
 
             }   inflateEnd( &str ); inp.close(); _Stop
@@ -358,8 +356,8 @@ namespace nodepp { namespace _zlib_ {
 
                 if(( size=inp.get_buffer_size()-str->avail_out )>0){
                     dout = (string_t){ inp.get_buffer_data(), size };
-                    while( _write(&out,dout)==1 ){ _Next; } 
-                    inp.onData.emit(dout); continue;
+                    inp.onData.emit(dout);
+                    while( _write(&out,dout)==1 ){ _Next; } continue;
                 }
 
                 if( x==Z_STREAM_END ) { break; } else if( x < 0 ){ 
@@ -401,11 +399,10 @@ namespace nodepp { namespace _zlib_ {
                     dout = (string_t){ inp.get_buffer_data(), size };
                     inp.onData.emit(dout); continue;
                 }
-
                 
                 if( x==Z_STREAM_END ) { break; } else if( x < 0 ){ 
                     string_t message = string::format("ZLIB: %s",str->msg);
-                    _onError( inp.onError, message ); inp.close(); _End;
+                    _onError( inp.onError, message ); inp.close(); break;
                 } 
 
             }   deflateEnd( &str ); inp.close(); _Stop
@@ -419,8 +416,8 @@ namespace nodepp { namespace _zlib_ {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#if defined(NODEPP_STREAM) && !defined(GENERATOR_STREAM)
-#define GENERATOR_STREAM 
+#if !defined(GENERATOR_STREAM) && defined(NODEPP_STREAM)
+    #define  GENERATOR_STREAM 
 namespace nodepp { namespace _stream_ {
 
     _Generator( pipe ){ public:
@@ -433,7 +430,7 @@ namespace nodepp { namespace _stream_ {
             while( inp.is_available() ){
             while( _read(&inp)==1 ){ _Next; } 
                if( _read.c <= 0 )  { break; }
-                inp.onData.emit( _read.y ); _Next;
+                inp.onData.emit( _read.y );
             }   inp.close();
         _Stop
         }
@@ -441,10 +438,10 @@ namespace nodepp { namespace _stream_ {
         template< class T, class V > _Emit( const T& inp, const V& out ){
         _Start inp.onPipe.emit();
             while( inp.is_available() && out.is_available() ){
-            while( _read(&inp)==1 ){ _Next; } 
-               if( _read.c <= 0 )  { break; }
+            while( _read(&inp)==1 )         { _Next; } 
+               if( _read.c <= 0 )           { break; }
+                inp.onData.emit( _read.y );
             while( _write(&out,_read.y)==1 ){ _Next; }
-                inp.onData.emit( _read.y ); _Next;
             }   inp.close(); out.close();
         _Stop
         }
@@ -463,7 +460,7 @@ namespace nodepp { namespace _stream_ {
             while( inp.is_available() ){
             while( _read(&inp)==1 ){ _Next; } 
                if( _read.c <= 0 )  { break; }
-                inp.onData.emit( _read.y ); _Next;
+                inp.onData.emit( _read.y );
             }   inp.close();
         _Stop
         }
@@ -471,10 +468,10 @@ namespace nodepp { namespace _stream_ {
         template< class T, class V > _Emit( const T& inp, const V& out ){
         _Start inp.onPipe.emit();
             while( inp.is_available() && out.is_available() ){
-            while( _read(&inp)==1 ){ _Next; } 
-               if( _read.c <= 0 )  { break; }
+            while( _read(&inp)==1 )         { _Next; } 
+               if( _read.c <= 0 )           { break; }
+                inp.onData.emit( _read.y );
             while( _write(&out,_read.y)==1 ){ _Next; }
-                inp.onData.emit( _read.y ); _Next;
             }   inp.close(); out.close();
         _Stop
         }
@@ -486,8 +483,8 @@ namespace nodepp { namespace _stream_ {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#if defined(NODEPP_TIMER) && !defined(GENERATOR_TIMER)
-#define GENERATOR_TIMER
+#if !defined(GENERATOR_TIMER) && defined(NODEPP_TIMER)
+    #define  GENERATOR_TIMER
 namespace nodepp { namespace _timer_ {
 
     _Generator( timer ){ public:
