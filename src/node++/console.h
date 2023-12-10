@@ -24,9 +24,18 @@ namespace nodepp { namespace console {
         while(!Serial.is_available() ){ process::next(); }
         return Serial.write( (char*) string::format( (char*)argc, args... ) );
     }
+    
+    /*─······································································─*/
 
     template< class... T >
-    int log( T... args ){ string::map([=]( string_t arg ){ pout("%s ",(char*)arg); }, args... ); return pout("\n"); }
+    int log( T... args ){ 
+        string::map([=]( string_t arg ){ 
+            pout("%s ",(char*)arg); 
+        },  args... ); 
+        return pout("\n"); 
+    }
+
+    /*─······································································─*/
 
     template< class... T >
     int warning( T... input ){ pout("\033[1;33mWARNING: \033[0m"); return log(input...); }
