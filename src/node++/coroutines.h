@@ -13,7 +13,7 @@ template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _ma
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _Return(VALUE) do { _state_ = _LINE; _EnableM return VALUE; case _LINE:; } while (0)
+#define _Return(VALUE) do { _state_ = _LINE; _Enable; return VALUE; case _LINE:; } while (0)
 #define _Next          do { _state_ = _LINE; _Enable; return 1;     case _LINE:; } while (0)
 #define _Again         do { _state_ = _LINE; _Enable; return 0;     case _LINE:; } while (0)
 #define _Goto(VALUE)   do { _state_ = VALUE; _Enable; return 1;                  } while (0)
