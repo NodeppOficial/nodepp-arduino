@@ -9,7 +9,7 @@ template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _ma
 
 #define _Ready loop(){ process::next(); } void setup
 
-#define $Main $Ready
+#define _Main _Ready
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
