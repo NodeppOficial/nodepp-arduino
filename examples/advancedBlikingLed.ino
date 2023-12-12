@@ -1,4 +1,4 @@
-#include <node++/node++.h>
+#include <node++.h>
 #include <node++/timer.h>
 
 using namespace nodepp;
