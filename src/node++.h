@@ -36,7 +36,7 @@ namespace nodepp { namespace process {
     /*─······································································─*/
 
     int next(){
-        static uint x = 0; _Start 
+        static uint x = 0; _Start _Ignore;
 
         x = process::task::size(); while( x-->0 ){ process::task::next(); _Next; }
         x = process::loop::size(); while( x-->0 ){ process::loop::next(); _Next; }
