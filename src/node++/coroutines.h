@@ -44,8 +44,8 @@ template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _ma
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define MAX_SOCKET 4096
-#define CHUNK_SIZE 4096
+#define MAX_SOCKET 1024
+#define CHUNK_SIZE 1024
 #define UNBFF_SIZE 1024
 #define TIMEOUT    1
 
