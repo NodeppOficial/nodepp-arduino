@@ -1,5 +1,5 @@
-#ifndef NODEPP_LOOP
-#define NODEPP_LOOP
+#ifndef NODEPP_TASK
+#define NODEPP_TASK
 
 namespace nodepp { namespace process {
 
