@@ -20,7 +20,7 @@ protected:
             if(   x!=nullptr ){ delete x; x = nullptr; }
         }   if( alt!=nullptr ){ delete alt; alt = nullptr; } }
 
-        void pipe( function_t<_str_*,_str_*> cb ){
+        void pipe( const function_t<_str_*,_str_*>& cb ){
             _str_* n = this; while( n!=nullptr ){
                 idx = 0; n = cb( n );
             }
@@ -166,7 +166,7 @@ protected:
 
     return root; }
 
-    ptr_t<ulong> match( string_t _str, ulong _off, _str_* NODE ) const noexcept {
+    ptr_t<ulong> match( const string_t& _str, ulong _off, _str_* NODE ) const noexcept {
         if( icase ){ _str.to_lower_case(); }
         
         ptr_t<ulong> _res ({ 0, 0 }); if( _str.empty() )return _res;

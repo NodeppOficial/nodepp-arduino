@@ -3,7 +3,7 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _max, val ) ); }
+template< class T > T clamp( const T& _min, const T& _max ){ return max( _min, min( _max, val ) ); }
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -13,9 +13,9 @@ template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _ma
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _Return(VALUE) do { _state_ = _LINE; _Enable; return VALUE; case _LINE:; } while (0)
-#define _Next          do { _state_ = _LINE; _Enable; return 1;     case _LINE:; } while (0)
-#define _Again         do { _state_ = _LINE; _Enable; return 0;     case _LINE:; } while (0)
+#define _Return(VALUE) do { _state_ = _Line; _Enable; return VALUE; case _Line:; } while (0)
+#define _Next          do { _state_ = _Line; _Enable; return 1;     case _Line:; } while (0)
+#define _Again         do { _state_ = _Line; _Enable; return 0;     case _Line:; } while (0)
 #define _Goto(VALUE)   do { _state_ = VALUE; _Enable; return 1;                  } while (0)
 #define _Yield(VALUE)  do { _state_ = VALUE; _Enable; return 1;     case VALUE:; } while (0)
 
@@ -80,12 +80,12 @@ namespace nodepp { class NODEPP_GENERATOR { public: NODEPP_GENERATOR() {} }; }
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _FUNC  __PRETTY_FUNCTION__
-#define _NAME  __FUNCTION__
-#define _DATE  __DATE__
-#define _FILE  __FILE__
-#define _LINE  __LINE__
-#define _TIME  __TIME__
+#define _Func  __PRETTY_FUNCTION__
+#define _Name  __FUNCTION__
+#define _Date  __DATE__
+#define _File  __FILE__
+#define _Line  __LINE__
+#define _Time  __TIME__
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #endif
