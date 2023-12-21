@@ -1,5 +1,5 @@
-#include <node++/node++.h>
-#include <node++/regex.h>
+#include <node++.h>
+#include <regex.h>
 
 using namespace nodepp;
 

@@ -1,6 +1,6 @@
-#include <node++/node++.h>
-#include <node++/timer.h>
-#include <node++/promise.h>
+#include <node++.h>
+#include <timer.h>
+#include <promise.h>
 
 using namespace nodepp;
 

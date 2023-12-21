@@ -1,5 +1,5 @@
-#include <node++/node++.h>
-#include <node++/timer.h>
+#include <node++.h>
+#include <timer.h>
 
 using namespace nodepp;
 

@@ -1,5 +1,5 @@
-#include <node++/node++.h>
-#include <node++/tuple.h>
+#include <node++.h>
+#include <tuple.h>
 
 using namespace nodepp;
 
