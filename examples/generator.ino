@@ -1,4 +1,4 @@
-#include <node++.h>
+#include <node++/node++.h>
 
 using namespace nodepp;
 

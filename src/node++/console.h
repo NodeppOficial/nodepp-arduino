@@ -10,17 +10,17 @@
 namespace nodepp { namespace console {
 
     template< class V, class... T >
-    int scan( const V& format, const T&... args ){ while(!Serial.available() ){}
-        return string::parse( Serial.readString().c_str(), (char*)format, args... );
+    int scan( const V& argc, const T&... args ){ while(!Serial.available() ){}
+        return string::parse( Serial.readString().c_str(), (char*)argc, args... );
     }
 
     template< class V, class... T >
-    int pout( const V& format, const T&... args ){
+    int pout( const V& argc, const T&... args ){
         return Serial.write( (char*) string::format( (char*)argc, args... ) );
     }
 
     template< class V, class... T >
-    int perr( const V& format, const T&... args ){
+    int perr( const V& argc, const T&... args ){
         return Serial.write( (char*) string::format( (char*)argc, args... ) );
     }
     

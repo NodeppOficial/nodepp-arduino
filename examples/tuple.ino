@@ -1,4 +1,4 @@
-#include <node++.h>
+#include <node++/node++.h>
 #include <node++/tuple.h>
 
 using namespace nodepp;
