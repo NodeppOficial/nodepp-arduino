@@ -1,9 +1,9 @@
 
-# uNode++
+# Node++
 
-**uNode++** is an innovative open source project that aims to make it easier to create applications in **C++**. This project introduces a high-level abstraction layer that allows developers to write **C++** code in a way that is similar to how they would write code in **NodeJS**. With **uNode++**, developers can leverage the advantages of the **C++** language while benefiting from the ease of use and flexibility that **NodeJS** offers. This unique combination of features makes **uNode++** a powerful tool for creating high-performance and scalable applications. Additionally, since it is an open source project, anyone can contribute and improve **uNode++** to fit their specific needs.
+**Node++** is an innovative open source project that aims to make it easier to create applications in **C++**. This project introduces a high-level abstraction layer that allows developers to write **C++** code in a way that is similar to how they would write code in **NodeJS**. With **Node++**, developers can leverage the advantages of the **C++** language while benefiting from the ease of use and flexibility that **NodeJS** offers. This unique combination of features makes **Node++** a powerful tool for creating high-performance and scalable applications. Additionally, since it is an open source project, anyone can contribute and improve **Node++** to fit their specific needs.
 
-- **uNode++:** compatible with embed devices [here](https://github.com/NodeppOficial/uNodepp)
+- **Node++:** compatible with embed devices [here](https://github.com/NodeppOficial/nodepp-arduino)
 - **Node++:** compatible with PC and esp32  [here](https://github.com/NodeppOficial/Nodepp)
 
 ## Key Features
@@ -17,7 +17,7 @@
 
 ## Usage
 
-To use **uNode++**, simply include the `node++.h` header file in your project and start writing **C++** code as if you were writing in **NodeJS**. Here's a simple example:
+To use **Node++**, simply include the `node++.h` header file in your project and start writing **C++** code as if you were writing in **NodeJS**. Here's a simple example:
 
 ```cpp
 #include <node++.h>
@@ -29,11 +29,11 @@ void _Ready() {
 }
 ```
 
-Example - [here](https://github.com/EDBCREPO/uNODE/tree/main/examples)
+Example - [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples)
 
 ## Contribution
 
-If you want to contribute to **uNode++**, you are welcome to do so! You can contribute in several ways:
+If you want to contribute to **Node++**, you are welcome to do so! You can contribute in several ways:
 
 - Improving the documentation
 - Reporting bugs and issues
@@ -43,4 +43,4 @@ If you want to contribute to **uNode++**, you are welcome to do so! You can cont
 
 ## License
 
-**uNode++** is distributed under the MIT License. See the LICENSE file for more details.
+**Node++** is distributed under the MIT License. See the LICENSE file for more details.
