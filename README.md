@@ -20,7 +20,7 @@
 To use **Node++**, simply include the `node++.h` header file in your project and start writing **C++** code as if you were writing in **NodeJS**. Here's a simple example:
 
 ```cpp
-#include <node++.h>
+#include <node++/node++.h>
 
 using namespace nodepp;
 
