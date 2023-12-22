@@ -28,7 +28,7 @@ template< class T > T clamp( const T& _min, const T& _max ){ return max( _min, m
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _Available static bool _available_ = 1; if( _available_ ) return 1; _Disable;
+#define _Available static bool _available_ = 1; if( !_available_ ) return 1; _Disable;
 #define _Disable     _available_ = 0
 #define _Enable      _available_ = 1
 #define _Set(VALUE)  _state_ = VALUE
