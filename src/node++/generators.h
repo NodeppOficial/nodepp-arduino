@@ -11,7 +11,7 @@ namespace nodepp { namespace _timer_ {
     _Generator( timer ){ public:
 
         template< class V, class... T > 
-        _Emit( const V& func, const ptr_t<ulong>& out, ulong time, const T&... args ){
+        _Emit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
         _Start
             if(*out == 0 )                   _End;
             if( process::millis() <= *out )  _Goto(0);
@@ -21,7 +21,7 @@ namespace nodepp { namespace _timer_ {
         }
 
         template< class V, class... T > 
-        _Emit( const V& func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
+        _Emit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
         _Start
             do { if(*out == 0 ) {  _End; }    _Next;
                } while( process::millis() <= *out ); 
@@ -37,7 +37,7 @@ namespace nodepp { namespace _timer_ {
     _Generator( utimer ){ public:
 
         template< class V, class... T > 
-        _Emit( const V& func, const ptr_t<ulong>& out, ulong time, const T&... args ){
+        _Emit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
         _Start
             do { if(*out == 0 ) {  _End; }   _Next;
                } while( process::micros() <= *out ); 
@@ -47,7 +47,7 @@ namespace nodepp { namespace _timer_ {
         }
 
         template< class V, class... T > 
-        _Emit( const V& func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
+        _Emit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
         _Start
             do { if(*out == 0 ) {  _End; }   _Next;
                } while( process::micros() <= *out ); 
