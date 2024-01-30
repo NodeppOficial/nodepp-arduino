@@ -16,6 +16,7 @@
 #include "string.h"
 #include "array.h"
 #include "queue.h"
+#include "event.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
