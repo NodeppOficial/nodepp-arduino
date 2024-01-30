@@ -1,27 +1,25 @@
-#include <node++.h>
+#include <nodepp.h>
 
 using namespace nodepp;
 
-void _Ready() { console::start(9600);
+void _main_() {
 
     process::loop::add([=](){ static int itr = 10;
-        _Start
-
+    _Start
         while( itr --> 0 ){
-            console::done(" Process 1:",itr); _Yield(1);
+            console::done(" Coroutine 1:",itr); 
+            _Next;
         }
-
-        _End
+    _Stop
     });
 
     process::loop::add([=](){ static int itr = 10;
-        _Start
-
+    _Start
         while( itr --> 0 ){
-            console::error("Process 2:",itr); _Yield(1);
+            console::error("Coroutine 2:",itr);
+            _Next;
         }
-
-        _End
+    _Stop
     });
 
 }

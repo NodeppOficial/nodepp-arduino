@@ -1,26 +1,9 @@
-#ifndef NODEPP_PROCESS
-#define NODEPP_PROCESS
+#ifndef NODEPP_IMPORT
+#define NODEPP_IMPORT
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#ifndef ARDUINO
-    #include <typeinfo>
-    #include <cstring>
-    #include <cstdlib>
-    #include <cstdio>
-#endif
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-#ifndef ARDUINO
-template< class T > T min( T min, T max ){ return min < max ? min : max; }
-template< class T > T max( T min, T max ){ return max > min ? max : min; }
-#endif
-template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _max, val ) ); }
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-#include "macros.h"
+#include "coroutines.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -37,14 +20,6 @@ template< class T > T clamp( T val, T _min, T _max ){ return max( _min, min( _ma
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #include "console.h"
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-#ifndef ARDUINO
-    #include "os.h"
-    #include "env.h"
-    #include "signal.h"
-#endif
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

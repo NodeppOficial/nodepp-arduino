@@ -3,12 +3,14 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#include "node++/process.h"
-#include "node++/loop.h"
+#include "import.h"
+#include "task.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
 namespace nodepp { namespace process {
+
+    array_t<string_t> args; int threads = 0;
 
     ulong size(){ 
         return process::poll::size() + 
@@ -19,12 +21,9 @@ namespace nodepp { namespace process {
     /*─······································································─*/
 
     void start( int argc, char** args ){
-        int i=0; while( ++i < argc ){
+        int i=0; do {
             process::args.push(args[i]);
-        }
-    #ifndef ARDUINO
-            process::signal_handler();
-    #endif
+        }   while( i ++< argc - 1 );
     }
 
     /*─······································································─*/
@@ -36,18 +35,14 @@ namespace nodepp { namespace process {
     
     /*─······································································─*/
 
-    int next(){
-        static uint x = 0; _Start x%=3;
+    int next(){static uint x = 0;   
+    _Start
 
-        if( x == 0 ){ process::task::next(); x++; _Next; }
-        if( x == 1 ){ process::loop::next(); x++; _Next; }
-        if( x == 2 ){ process::poll::next(); x++; _Next; }
+        x = process::task::size(); while( x-->0 ){ process::task::next(); _Next; }
+        x = process::loop::size(); while( x-->0 ){ process::loop::next(); _Next; }
+        x = process::poll::size(); while( x-->0 ){ process::poll::next(); _Next; }
 
-        #ifndef ARDUINO 
-            process::delay( TIMEOUT ); 
-        #endif
-
-        _Stop
+    _Stop
     }
     
     /*─······································································─*/
@@ -70,9 +65,7 @@ namespace nodepp { namespace process {
     
     /*─······································································─*/
 
-    template< class... T >
-    void pipe( T... args ){
-        process::start( args... );
+    void pipe(){
         while( !process::empty() )
                 process::next();
     }

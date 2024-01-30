@@ -1,14 +1,15 @@
 #ifndef NODEPP_MAP
 #define NODEPP_MAP
 
-namespace nodepp {
-
 /*────────────────────────────────────────────────────────────────────────────*/
 
-template<class U, class V>
-class map_t : public array_t<type::pair<U,V>> { public:
+namespace nodepp { template<class U, class V>
+class map_t : public array_t<type::pair<U,V>> {
+private:
 
-    using T = type::pair<U,V>; map_t() noexcept = default;
+    using T = type::pair<U,V>;
+
+public: map_t() noexcept {}
     
     /*─······································································─*/
 
@@ -24,8 +25,7 @@ class map_t : public array_t<type::pair<U,V>> { public:
 
     template< ulong N >
     map_t& operator=( const T (&args) [N] ) noexcept {
-        this->buffer = ptr_t<T>( N );
-        for( ulong x=N; x--; )
+        this->buffer = ptr_t<T>( N ); for( ulong x=N; x--; )
             { this->buffer[x] = args[x]; } return *this;
     }
 
@@ -38,7 +38,7 @@ class map_t : public array_t<type::pair<U,V>> { public:
     
     /*─······································································─*/
 
-    V& operator[]( U name ) noexcept {
+    V& operator[]( const U& name ) noexcept {
         
         for( ulong x=0; x<this->size(); x++ ){
             if( this->buffer[x].first == name )
@@ -51,7 +51,7 @@ class map_t : public array_t<type::pair<U,V>> { public:
     
     /*─······································································─*/
 
-    void erase( U name ) noexcept {
+    void erase( const U& name ) noexcept {
         if( this->empty() ){ return; } else {
             auto n_buffer = ptr_t<T>( this->last() );
             for( ulong i=0, j=0; i<this->size() && !n_buffer.empty(); i++ ){
@@ -60,10 +60,8 @@ class map_t : public array_t<type::pair<U,V>> { public:
         }
     }
 
-};
+};}
 
 /*────────────────────────────────────────────────────────────────────────────*/
-
-}
 
 #endif

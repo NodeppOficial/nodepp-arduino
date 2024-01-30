@@ -1,10 +1,9 @@
-#include <node++.h>
-#include <node++/timer.h>
+#include <nodepp.h>
+#include <nodepp/timer.h>
 
 using namespace nodepp;
 
-void _Ready() {
-    console::start(9600);
+void _main_() {
 
     timer::interval([](){
         console::log("hello world");

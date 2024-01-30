@@ -1,10 +1,9 @@
-#include <node++.h>
-#include <node++/regex.h>
+#include <nodepp.h>
+#include <nodepp/regex.h>
 
 using namespace nodepp;
 
-void _Ready() {
-    console::start(9600);
+void _main_() {
 
     regex_t reg("\\d+","i");
     console::log( "hola 123: ", reg.test("hola 123") ? "true" : "false" );

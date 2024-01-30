@@ -21,9 +21,10 @@ private:
     using T = NODE_<U,V,E>;
 
 protected: 
+
     array_t<T> node;
 
-public:
+public: observer_t() noexcept {}
 
     template< class... O >
     observer_t( const T& argc, const O&... args ) noexcept {
@@ -37,10 +38,8 @@ public:
 
     template< ulong N >
     observer_t& operator=( const T (&args) [N] ) noexcept {
-        node = array_t<T>( N ); 
-        for( ulong x=N; x--; )
-           { node[x] = args[x]; }
-             return *this;
+        node = array_t<T>( N ); for( ulong x=N; x--; )
+           { node[x] = args[x]; } return *this;
     }
 
     template< ulong N >
@@ -53,7 +52,7 @@ public:
     /*─······································································─*/
 
     template< class F >
-    ulong once( U name, F func ) const noexcept {
+    ulong once( const U& name, F func ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 return node[x].third.once( func );
@@ -61,14 +60,14 @@ public:
     }
 
     template< class F >
-    ulong on( U name, F func ) const noexcept {
+    ulong on( const U& name, F func ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 return node[x].third.on( func );
         }       return 0;
     }
 
-    void off( U name, ulong id ) const noexcept {
+    void off( const U& name, ulong id ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 node[x].third.off( id );
@@ -85,7 +84,7 @@ public:
     /*─······································································─*/
 
     template< class F >
-    void set( U name, F value ) const noexcept {
+    void set( const U& name, const F& value ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name ){
                 node[x].third.emit( node[x].second, value );
@@ -104,7 +103,7 @@ public:
 
     /*─······································································─*/
 
-    const V get( U name ) const noexcept {
+    const V get( const U& name ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 return node[x].second;
@@ -118,14 +117,11 @@ public:
     
     /*─······································································─*/
 
-    const V operator[]( U name ) const noexcept {
-        
+    const V operator[]( const U& name ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
             return node[x].second;
-        }   
-        
-        return ( const V ){ 0 };
+        }   return ( const V ){ 0 };
     }
 
 };}

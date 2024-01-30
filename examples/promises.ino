@@ -1,11 +1,10 @@
-#include <node++.h>
-#include <node++/timer.h>
-#include <node++/promise.h>
+#include <nodepp.h>
+#include <nodepp/timer.h>
+#include <nodepp/promise.h>
 
 using namespace nodepp;
 
-void _Ready() { 
-    console::start(9600);
+void _main_() {
 
     auto t = timer::add([](){
         static int i=0; i++;
@@ -29,9 +28,7 @@ void _Ready() {
         timer::timeout([=](){ res(30); },10000);
     });
 
-    console::log("wait for it");
-
-    timer::delay( 5000 );
+    console::log("wait for it"); timer::delay( 5000 );
 
     console::log("third promise resolved:",rej );
 

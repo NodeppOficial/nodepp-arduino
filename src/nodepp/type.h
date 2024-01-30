@@ -104,8 +104,6 @@ namespace nodepp { namespace type {
 
     template <> struct is_integral<char32_t> : true_type {};
 
-    template <> struct is_integral<signed char> : true_type {};
-
     /*─······································································─*/
 
     template <typename T> struct is_floating_point : false_type {};
@@ -114,7 +112,7 @@ namespace nodepp { namespace type {
 
     template <> struct is_floating_point<double> : true_type {};
 
-    template <> struct is_floating_point<long double> : true_type {};
+    template <> struct is_floating_point<ldouble> : true_type {};
     
     /*─······································································─*/
 

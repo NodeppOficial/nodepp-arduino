@@ -7,30 +7,21 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp {  
-namespace _event_ { template< class... T > struct str {
-    ulong            id;
-    function_t<T...> cb;
-};}
-}
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
 namespace nodepp { template< class... A > class event_t { 
 protected:
 
-    using ev = queue_t<_event_::str<void,A...>>;
-    ptr_t<ev> once_queue = new ev(), every_queue = new ev();
+    using ob = type::pair<ulong,function_t<void,A...>>;
+    using ev = queue_t<ob>;
 
-public:
+    ptr_t<ev> once_queue, every_queue;
 
-    event_t() noexcept = default;
+public: event_t() noexcept : once_queue(new ev), every_queue(new ev) {}
     
     /*─······································································─*/
 
-    void emit( A... args ) const noexcept {
-        every_queue->map([=]( _event_::str<void,A...> arg ){ arg.cb(args...); });
-        once_queue->map([=]( _event_::str<void,A...> arg ){ arg.cb(args...); });
+    void emit( const A&... args ) const noexcept {
+        every_queue->map([=]( ob arg ){ arg.second(args...); });
+         once_queue->map([=]( ob arg ){ arg.second(args...); });
         if( !once_queue->empty() ) once_queue->clear();
     }
     
@@ -44,9 +35,10 @@ public:
     /*─······································································─*/
 
     void off( ulong _hash ) const noexcept {
-        ulong index_A = every_queue->index_of([=]( _event_::str<void,A...> data ){ return data.id == _hash; });
-        ulong index_B = once_queue->index_of([=]( _event_::str<void,A...> data ){ return data.id == _hash; });
-        every_queue->erase( every_queue->get( index_A ) ); once_queue->erase( once_queue->get( index_B ) );
+        ulong index_A = every_queue->index_of([=]( ob data ){ return data.first == _hash; });
+        ulong index_B =  once_queue->index_of([=]( ob data ){ return data.first == _hash; });
+        every_queue->erase( every_queue->get( index_A ) ); 
+         once_queue->erase( once_queue->get( index_B ) );
     }
 
     ulong once( function_t<void,A...> func ) const noexcept {

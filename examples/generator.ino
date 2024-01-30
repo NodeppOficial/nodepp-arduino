@@ -1,33 +1,31 @@
-#include <node++.h>
+#include <nodepp.h>
 
 using namespace nodepp;
 
 _Generator( process_1 ) {
     int counter = 100;
-    _Emit(int)
-
-    while( counter-->0 ){
-        console::done(" :>",counter);
-        _Return( counter );
-    }
-
-    _Stop
+    _Emit(){ 
+    _GStart
+        while( counter-->0 ){
+            console::done(" :>",counter);
+            _Next;
+        }
+    _GStop }
 };
 
 _Generator( process_2 ) {
     int counter = 100;
-    _Emit(int)
-
-    while( counter-->0 ){
-        console::error(":>",counter);
-        _Return( counter );
-    }
-
-    _Stop
+    _Emit(){ 
+    _GStart
+        while( counter-->0 ){
+            console::done(" :>",counter);
+            _Next;
+        }
+    _GStop }
 };
 
-void _Ready() {
-    console::start(9600);
+void _main_() {
     process_1 A; process_2 B;
-    while( A()>0 && B()>0 ){}
+    process::loop::add(A);
+    process::loop::add(B);
 }
