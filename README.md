@@ -47,7 +47,6 @@
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
     console::log("Hello World!");
 }
 ```
@@ -63,7 +62,6 @@ Hello World!
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
     ptr_t<int> ptr = new int(10);
     console::log( ":>", *ptr );
 }
@@ -79,7 +77,6 @@ void _main_() {
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
     ptr_t<int> ptr ({ 10, 20, 30, 40, 50 });
     for( auto x : ptr ) console::log( ":>", x );
 }
@@ -99,8 +96,6 @@ void _main_() {
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
-
     ptr_t<int> ptr = new int(10);
     console::log( ":>", *ptr );
 
@@ -127,7 +122,6 @@ void _main_() {
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
     array_t<int> arr ({ 10, 20, 30, 40, 50 });
     for( auto x : arr ) console::log( ":>", x );
 }
@@ -147,7 +141,6 @@ void _main_() {
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
     string_t str = "Hello World!";
     console::log( ":>", str );
 }
@@ -163,7 +156,6 @@ Hello World!
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     //return 1 -> will repeat the task
     process::loop::add([=](){
@@ -193,7 +185,6 @@ void _main_() {
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     process::add([=](){ 
         static int x = 3;
@@ -231,7 +222,6 @@ B: x = 0
 using namespace nodepp;
 
 _Generator( gen ) {
-    console::start(9600);
     
     int x = 3;
 
@@ -265,7 +255,6 @@ x:> 0
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     timer::interval([=](){ 
         static int i=0; i++; i %= 1000;
@@ -293,7 +282,6 @@ interval every: 1 second - 4 seconds
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     timer::timeout([=](){
         console::error("timeout after: 10 seconds");
@@ -316,7 +304,6 @@ timeout after: 10 seconds
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     auto x = timer::timeout([=](){
         console::error("timeout after: 10 seconds");
@@ -342,7 +329,6 @@ using namespace nodepp;
 event_t<> ev; 
 
 void _main_() {
-    console::start(9600);
 
     ev.on([](){ console::log("Hello World!"); });
     ev.emit();
@@ -366,7 +352,6 @@ observer_t obj ({
 });
 
 void _main_() {
-    console::start(9600);
 
     obj.on( "b", []( any_t A, any_t B ){
         console::done( " B:>", (int)A, "|", (int)B, "changed" );
@@ -395,7 +380,6 @@ B:> 0 | 10 changed
 using namespace nodepp;
 
 void _main_() {
-    console::start(9600);
 
     promise_t<int,int>([=]( auto res, auto rej ){
         timer::delay(1000); res(10);
