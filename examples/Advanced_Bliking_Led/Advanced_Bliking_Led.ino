@@ -7,9 +7,7 @@ void _main_() {
 
     queue_t<int> q ({ 13, 12, 11, 10 });
 
-    q.map([]( int pin ){ 
-        IO::mode( pin, OUTPUT ); 
-    });
+    q.map([]( int pin ){ IO::mode( pin, OUTPUT ); });
 
     timer::interval([=](){
         static auto p = q; p.next();
