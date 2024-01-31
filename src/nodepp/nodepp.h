@@ -11,38 +11,19 @@
 namespace nodepp { namespace process {
 
     array_t<string_t> args; int threads = 0;
+    
+    /*─······································································─*/
+
+    template< class... T >
+    void add( const T&... args ){ process::loop::add( args... ); }
+    
+    /*─······································································─*/
 
     ulong size(){ 
         return process::poll::size() + 
                process::task::size() + 
-               process::loop::size(); 
-    }
-    
-    /*─······································································─*/
-
-    void start( int argc, char** args ){
-        int i=0; do {
-            process::args.push(args[i]);
-        }   while( i ++< argc - 1 );
-    }
-
-    /*─······································································─*/
-
-    template< class... T >
-    void add( const T&... args ){ 
-        process::loop::add( args... ); 
-    }
-    
-    /*─······································································─*/
-
-    int next(){static uint x = 0;   
-    _Start
-
-        x = process::task::size(); while( x-->0 ){ process::task::next(); _Next; }
-        x = process::loop::size(); while( x-->0 ){ process::loop::next(); _Next; }
-        x = process::poll::size(); while( x-->0 ){ process::poll::next(); _Next; }
-
-    _Stop
+               process::loop::size() + 
+               process::threads      ; 
     }
     
     /*─······································································─*/
@@ -61,7 +42,34 @@ namespace nodepp { namespace process {
         process::poll::empty() && 
         process::loop::empty() && 
         process::threads < 1 
-    );}
+    ) ; }
+    
+    /*─······································································─*/
+
+    void start( int argc, char** args ){
+        int i=0; do {
+            process::args.push(args[i]);
+        }   while( i ++< argc - 1 );
+    }
+
+    /*─······································································─*/
+
+    int next(){ 
+        static uint x = 0;
+    _Start
+
+        while( x-->0 ){
+            if( !process::task::empty() ){ process::task::next(); _Next; }
+            if( !process::poll::empty() ){ process::poll::next(); _Next; }
+            if( !process::loop::empty() ){ process::loop::next(); _Next; }
+        }    x = process::size();
+
+        #if _KERNEL != NODEPP_KERNEL_ARDUINO
+            process::delay( TIMEOUT );
+        #endif
+
+    _Stop
+    }
     
     /*─······································································─*/
 
