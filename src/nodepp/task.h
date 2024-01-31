@@ -21,8 +21,12 @@ namespace task {
 
     template< class T, class... V >
     void add( T cb, const V&... arg ){ 
-        ptr_t<T> pcb = new T(cb); 
-        queue.push([=](){ return (*pcb)(arg...); });
+        ptr_t<type::pair<bool,T>> pb = new type::pair<bool,T>({ 0, cb });
+        queue.push([=](){ 
+            if(pb->first){ return 1; } pb->first = 1;
+            auto rs = (pb->second)(arg...);
+            pb->first = 0; return rs; 
+        });
     }
 
     void next(){ onNext.emit();
@@ -48,8 +52,12 @@ namespace loop {
 
     template< class T, class... V >
     void add( T cb, const V&... arg ){ 
-        ptr_t<T> pcb = new T(cb); 
-        queue.push([=](){ return (*pcb)(arg...); });
+        ptr_t<type::pair<bool,T>> pb = new type::pair<bool,T>({ 0, cb });
+        queue.push([=](){ 
+            if(pb->first){ return 1; } pb->first = 1;
+            auto rs = (pb->second)(arg...);
+            pb->first = 0; return rs; 
+        });
     }
 
     void next(){ onNext.emit();
@@ -75,8 +83,12 @@ namespace poll {
 
     template< class T, class... V >
     void add( T cb, const V&... arg ){ 
-        ptr_t<T> pcb = new T(cb); 
-        queue.push([=](){ return (*pcb)(arg...); });
+        ptr_t<type::pair<bool,T>> pb = new type::pair<bool,T>({ 0, cb });
+        queue.push([=](){ 
+            if(pb->first){ return 1; } pb->first = 1;
+            auto rs = (pb->second)(arg...);
+            pb->first = 0; return rs; 
+        });
     }
 
     void next(){ onNext.emit();
