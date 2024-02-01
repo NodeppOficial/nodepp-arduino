@@ -7,11 +7,11 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _Return(VALUE) do { _state_ = _LINE; return VALUE; case _LINE:; } while (0)
-#define _Next          do { _state_ = _LINE; return 1;     case _LINE:; } while (0)
-#define _Again         do { _state_ = _LINE; return 0;     case _LINE:; } while (0)
-#define _Goto(VALUE)   do { _state_ = VALUE; return 1;                  } while (0)
-#define _Yield(VALUE)  do { _state_ = VALUE; return 1;     case VALUE:; } while (0)
+#define _Return(VALUE) do { _state_ = _LINE; _Enable; return VALUE; case _LINE:; } while (0)
+#define _Next          do { _state_ = _LINE; _Enable; return 1;     case _LINE:; } while (0)
+#define _Again         do { _state_ = _LINE; _Enable; return 0;     case _LINE:; } while (0)
+#define _Goto(VALUE)   do { _state_ = VALUE; _Enable; return 1;                  } while (0)
+#define _Yield(VALUE)  do { _state_ = VALUE; _Enable; return 1;     case VALUE:; } while (0)
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -22,15 +22,15 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _Start static int _state_ = 0; { switch(_state_) { case 0:;
-#define _End   do { _state_ = 0; return -1; } while (0)
-#define _Stop     } _state_ = 0; return -1; }
-#define _Emit  int operator()
+#define _GStart if ( !_available_ ){ return 1; } _Disable; { switch(_state_) { case 0:;
+#define _GStop     }  _state_ = 0; _Enable; return -1; }
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _GStart { switch(_state_){ case 0:;
-#define _GStop  } _state_ = 0; return -1; }
+#define _Start static int _state_ = 0; _Available { switch(_state_) { case 0:;
+#define _End   do { _state_ = 0; _Enable; return -1; } while (0)
+#define _Stop     } _state_ = 0; _Enable; return -1; }
+#define _Emit  int operator()
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -41,8 +41,11 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#define _Available static bool _available_ = 1; if( !_available_ ) return 1; _Disable;
 #define _Generator(NAME) struct NAME : public NODEPP_GENERATOR_BASE
 #define _Set(VALUE)      _state_     = VALUE
+#define _Disable         _available_ = 1 // 0
+#define _Enable          _available_ = 1
 #define _Get             _state_
 
 /*────────────────────────────────────────────────────────────────────────────*/
