@@ -28,21 +28,21 @@ namespace nodepp { namespace process {
     
     /*─······································································─*/
 
-    void clear(){ 
-        process::task::clear();
-        process::poll::clear(); 
-        process::loop::clear(); 
-        process::threads = 0; 
-    }
-    
-    /*─······································································─*/
-
     bool empty(){ return ( 
         process::task::empty() && 
         process::poll::empty() && 
         process::loop::empty() && 
         process::threads < 1 
     ) ; }
+    
+    /*─······································································─*/
+
+    void clear(){ 
+        process::task::clear();
+        process::poll::clear(); 
+        process::loop::clear(); 
+        process::threads = 0; 
+    }
     
     /*─······································································─*/
 
@@ -54,13 +54,23 @@ namespace nodepp { namespace process {
 
     /*─······································································─*/
 
+    template< class T, class... V > 
+    void await( T cb, const V&... args ){
+        while( cb( args... ) >= 0 )
+             { next(); }
+    }
+
+    /*─······································································─*/
+
     int next(){
         static int x = 0;   
     _Start
 
-        x = process::task::size(); while( x-->0 ){ process::task::next(); _Next; }
-        x = process::loop::size(); while( x-->0 ){ process::loop::next(); _Next; }
-        x = process::poll::size(); while( x-->0 ){ process::poll::next(); _Next; }
+        while( x>0 ){
+            if( !process::poll::empty() ){ process::poll::next(); _Next; x--; }
+            if( !process::loop::empty() ){ process::loop::next(); _Next; x--; }
+            if( !process::task::empty() ){ process::task::next(); _Next; x--; }
+        }    x = process::size();
 
     _Stop
     }
