@@ -12,9 +12,10 @@ namespace nodepp { namespace promise {
     template< class T, class V > void resolve( 
         function_t<void,function_t<void,T>,function_t<void,V>> func,
         function_t<void,T> res, function_t<void,V> rej
-    ){  process::task::add([=](){ func(
-            [=]( T data ){ res(data); },
-            [=]( V data ){ rej(data); }
+    ){  ptr_t<int> state = new int(0);
+        process::task::add([=](){ func(
+            [=]( T data ){ if( *state == 0 ){ res(data); } *state = 1; },
+            [=]( V data ){ if( *state == 0 ){ rej(data); } *state = 1; }
         ); return -1; });
     }
 
@@ -23,9 +24,9 @@ namespace nodepp { namespace promise {
     template< class T > void resolve( 
         function_t<void,function_t<void,T>> func,
         function_t<void,T> res
-    ){  process::task::add([=](){ 
-        func(
-            [=]( T data ){ res(data); }
+    ){  ptr_t<int> state = new int(0);
+        process::task::add([=](){ func(
+            [=]( T data ){ if( *state == 0 ){ res(data); } *state = 1; }
         ); return -1; });
     }
 
@@ -34,8 +35,9 @@ namespace nodepp { namespace promise {
     template< class T > T await ( 
         function_t<void,function_t<void,T>> func 
     ){  T result; ptr_t<int> done = new int(0); 
-        resolve<T>( func, [&]( T res ){ result = res; *done = 1; });
-        while( *done == 0 ){ process::next(); } return result;
+        resolve<T>( func, 
+           [&]( T res ){ if( *done == 0 ){ result = res; } *done = 1; 
+        }); while( *done == 0 ){ process::next(); } return result;
     }
 
     /*─······································································─*/
@@ -44,8 +46,8 @@ namespace nodepp { namespace promise {
         function_t<void,function_t<void,T>,function_t<void,V>> func 
     ){  T res; V rej; int st=-1; ptr_t<int> done = new int(0); 
         promise::resolve<T,V>( func, 
-            [&]( T _data ){ res = _data; st=0; *done = 1; }, 
-            [&]( V _data ){ rej = _data; st=1; *done = 1; }
+            [&]( T _data ){ if( *done == 0 ){ res = _data; st=0; } *done = 1; }, 
+            [&]( V _data ){ if( *done == 0 ){ rej = _data; st=1; } *done = 1; }
         );
         while( *done == 0 ){ process::next(); } 
         return tuple_t<int,T,V> (st,res,rej);
@@ -86,20 +88,15 @@ public:
 
     /*─······································································─*/
 
-    tuple_t<int,T,V> await() const noexcept { T res; V rej; int st=-1; 
-        if( obj->state != 1 ){ return tuple_t<int,T,V>( st, res, rej ); } 
-            obj->state  = 0; ptr_t<int> done = new int(0);
-        promise::resolve<T,V>( obj->main_func, 
-            [&]( T _data ){ res = _data; st=0; *done = 1; }, 
-            [&]( V _data ){ rej = _data; st=1; *done = 1; }
-        );  while( *done == 0 ){ process::next(); } 
-        return tuple_t<int,T,V> (st,res,rej);
+    void resolve() const noexcept { if( obj->state==2 ){ return; } obj->state=0;
+        promise::resolve<T,V>( obj->main_func, obj->res_func, obj->rej_func ); 
     }
 
     /*─······································································─*/
 
-    void resolve() const noexcept { if( obj->state<2 ){ return; } obj->state=0;
-        promise::resolve<T,V>( obj->main_func, obj->res_func, obj->rej_func ); 
+    tuple_t<int,T,V> await() const noexcept { T res; V rej;
+        if( obj->state==2 ) return tuple_t<int,T,V>( 1, res, rej );
+            obj->state =0;  return promise::await<T,V>( obj->main_func );
     }
 
 };}
