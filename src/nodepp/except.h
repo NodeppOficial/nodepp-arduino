@@ -6,7 +6,7 @@
 namespace nodepp { class except_t { 
 protected: 
 
-    string_t message; ulong ev;
+    string_t message; void* id;
     
 public:
 
