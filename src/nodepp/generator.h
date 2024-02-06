@@ -1,3 +1,5 @@
+#define NODEPP_GENERATOR
+
 #if !defined(GENERATOR_TIMER) && defined(NODEPP_TIMER)
     #define  GENERATOR_TIMER
 namespace nodepp { namespace _timer_ {
@@ -53,6 +55,7 @@ namespace nodepp { namespace _timer_ {
     };
 
 }}
+#undef NODEPP_GENERATOR
 #endif
 
 /*────────────────────────────────────────────────────────────────────────────*/
