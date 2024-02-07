@@ -18,12 +18,12 @@ void _main_() {
     });
 
     process::add([](){
-    _Start
+    coStart
         while( IO::digital::read(INP[0])==0 )
-          { _Next; } Evento.emit();
+             { coNext; } Evento.emit();
         while( IO::digital::read(INP[0])==1 )
-          { _Next; } _Goto(0);
-    _Stop
+             { coNext; } coGoto(0);
+    coStop
     });
     
 }

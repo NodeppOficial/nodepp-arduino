@@ -5,21 +5,21 @@ using namespace nodepp;
 void _main_() {
 
     process::loop::add([=](){ static int itr = 10;
-    _Start
+    coStart
         while( itr --> 0 ){
             console::done(" Coroutine 1:",itr); 
-            _Next;
+            coNext;
         }
-    _Stop
+    coStop
     });
 
     process::loop::add([=](){ static int itr = 10;
-    _Start
+    coStart
         while( itr --> 0 ){
             console::error("Coroutine 2:",itr);
-            _Next;
+            coNext;
         }
-    _Stop
+    coStop
     });
 
 }

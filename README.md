@@ -188,20 +188,20 @@ void _main_() {
 
     process::add([=](){ 
         static int x = 3;
-    _Start
+    coStart
         while( x --> 0 ){
-            console::log("A: x =",x); _Next;
+            console::log("A: x =",x); coNext;
         }
-    _Stop
+    coStop
     });
 
     process::add([=](){ 
         static int x = 3;
-    _Start
+    coStart
         while( x --> 0 ){
-            console::log("B: x =",x); _Next;
+            console::log("B: x =",x); coNext;
         }
-    _Stop
+    coStop
     });
 
 }
@@ -221,17 +221,17 @@ B: x = 0
 
 using namespace nodepp;
 
-_Generator( gen ) {
+GENERATOR( gen ) {
     
     int x = 3;
 
-    _Emit(){ 
-    _GStart;
+    gnEmit(){ 
+    gnStart;
         while( x-->0 ){
             console::log("x:>",x); 
-            _Next;
+            coNext;
         }
-    _GStop;
+    gnStop;
     }
 
 };

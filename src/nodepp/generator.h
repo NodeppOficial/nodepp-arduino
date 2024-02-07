@@ -4,52 +4,52 @@
     #define  GENERATOR_TIMER
 namespace nodepp { namespace _timer_ {
 
-    _Generator( timer ){ public:
+    GENERATOR( timer ){ public:
 
         template< class V, class... T > 
-        _Emit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
-        _GStart
-            if(*out == 0 )                   _End;
-            if( process::millis() <= *out )  _Goto(0);
-            if ( func(args...)<0 )           _End;
-            *out = process::millis() + time; _Goto(0); 
-        _GStop
+        gnEmit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
+        gnStart
+            if(*out == 0 )                   coEnd;
+            if( process::millis() <= *out )  coGoto(0);
+            if ( func(args...)<0 )           coEnd;
+            *out = process::millis() + time; coGoto(0); 
+        gnStop
         }
 
         template< class V, class... T > 
-        _Emit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
-        _GStart
-            do { if(*out == 0 ) {  _End; }    _Next;
+        gnEmit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
+        gnStart
+            do { if(*out == 0 ) {  coEnd; }   coNext;
                } while( process::millis() <= *out ); 
-            if ( func(args...)<0 ){ _End; }
-            *out = process::millis() + *time; _Goto(0); 
-        _GStop
+            if ( func(args...)<0 ){ coEnd; }
+            *out = process::millis() + *time; coGoto(0); 
+        gnStop
         }
 
     };
     
     /*─······································································─*/
 
-    _Generator( utimer ){ public:
+    GENERATOR( utimer ){ public:
 
         template< class V, class... T > 
-        _Emit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
-        _GStart
-            do { if(*out == 0 ) {  _End; }   _Next;
+        gnEmit( V func, const ptr_t<ulong>& out, ulong time, const T&... args ){
+        gnStart
+            do { if(*out == 0 ) {  coEnd; }   coNext;
                } while( process::micros() <= *out ); 
-            if ( func(args...)<0 ){ _End; }
-            *out = process::micros() + time; _Goto(0); 
-        _GStop
+            if ( func(args...)<0 ){ coEnd; }
+            *out = process::micros() + time;  coGoto(0); 
+        gnStop
         }
 
         template< class V, class... T > 
-        _Emit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
-        _GStart
-            do { if(*out == 0 ) {  _End; }   _Next;
+        gnEmit( V func, const ptr_t<ulong>& out, ulong* time, const T&... args ){
+        gnStart
+            do { if(*out == 0 ) {  coEnd; }   coNext;
                } while( process::micros() <= *out ); 
-            if ( func(args...)<0 ){ _End; } 
-            *out = process::micros() + *time; _Goto(0);
-        _GStop
+            if ( func(args...)<0 ){ coEnd; } 
+            *out = process::micros() + *time; coGoto(0);
+        gnStop
         }
 
     };

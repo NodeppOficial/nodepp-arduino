@@ -2,26 +2,26 @@
 
 using namespace nodepp;
 
-_Generator( process_1 ) {
+GENERATOR( process_1 ) {
     int counter = 100;
-    _Emit(){ 
-    _GStart
+    gnEmit(){ 
+    gnStart
         while( counter-->0 ){
             console::done(" :>",counter);
-            _Next;
+            coNext;
         }
-    _GStop }
+    gnStop }
 };
 
 _Generator( process_2 ) {
     int counter = 100;
-    _Emit(){ 
-    _GStart
+    gnEmit(){ 
+    gnStart
         while( counter-->0 ){
             console::done(" :>",counter);
-            _Next;
+            coNext;
         }
-    _GStop }
+    gnStop }
 };
 
 void _main_() {
