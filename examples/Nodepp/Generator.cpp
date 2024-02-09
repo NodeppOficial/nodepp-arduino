@@ -1,30 +1,32 @@
-#ifndef NODEPP_IMPORT
-#define NODEPP_IMPORT
+#include <nodepp/nodepp.h>
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#include "coroutine.h"
-#include "type.h"
+using namespace nodepp;
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#include "function.h"
-#include "string.h"
-#include "array.h"
-#include "queue.h"
+GENERATOR( process_1 ) {
+    
+    int counter = 10;
+
+    gnEmit(){ 
+    gnStart
+    
+        while( counter-->0 ){
+            console::done( ":>", counter ); 
+            coNext;
+        }
+
+    gnStop
+    }
+
+};
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#include "iterator.h"
-#include "console.h"
-#include "event.h"
+void _main_() { 
+    process_1 A; process::add(A); 
+}
 
 /*────────────────────────────────────────────────────────────────────────────*/
-
-#include "except.h"
-#include "sleep.h"
-#include "io.h"
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-#endif

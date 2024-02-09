@@ -3,7 +3,6 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#include "iterator.h"
 #include "conio.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -15,32 +14,10 @@ namespace nodepp { namespace console {
         return string::parse( Serial.readString().c_str(), (char*)argc, args... );
     }
 
-    template< class V, class... T >
-    int pout( const V& argc, const T&... args ){
-        return Serial.write( (char*) string::format( (char*)argc, args... ) );
-    }
-
-    template< class V, class... T >
-    int perr( const V& argc, const T&... args ){
-        return Serial.write( (char*) string::format( (char*)argc, args... ) );
-    }
-
     /*─······································································─*/
 
     template< class... T >
-    int log( const T&... args ){ 
-        string::map([=]( string_t arg ){ 
-            pout("%s ",(char*)arg); 
-        },  args... ); 
-            return pout("\n"); 
-    }
-
-    template< class... T >
-    void start( const T&... args ){
-        Serial.begin( args... );
-    }
-
-    int log(){ return pout("\n"); }
+    int log( const T&... args ){ return conio::log(args...,"\n"); }
 
     void clear(){ conio::clear(); }
     
@@ -48,31 +25,31 @@ namespace nodepp { namespace console {
 
     template< class... T >
     int warning( const T&... args ){ 
-               conio::warn("WARNING: ");
+        conio::warn("WARNING: ");
         return log( args... ); 
     }
 
     template< class... T >
     int success( const T&... args ){ 
-               conio::done("SUCCESS: ");
+        conio::done("SUCCESS: ");
         return log( args... );  
     }
 
     template< class... T >
     int error( const T&... args ){ 
-               conio::error("ERROR: "); 
+        conio::error("ERROR: "); 
         return log( args... ); 
     }
 
     template< class... T >
     int done( const T&... args ){ 
-               conio::done("DONE: "); 
+        conio::done("DONE: "); 
         return log( args... ); 
     }
 
     template< class... T >
     int info( const T&... args ){ 
-               conio::info("INFO: "); 
+        conio::info("INFO: "); 
         return log( args... ); 
     }
 

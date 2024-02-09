@@ -14,13 +14,6 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _main_ _init_(); void setup(){ \
-   console::start( 9600 ); _init_(); \
-} void loop(){ process::next(); \
-} void _init_
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
 #define coReturn(VALUE) do { _state_ = _LINE_; return VALUE; case _LINE_:; } while (0)
 #define coNext          do { _state_ = _LINE_; return 1;     case _LINE_:; } while (0)
 #define coAgain         do { _state_ = _LINE_; return 0;     case _LINE_:; } while (0)
@@ -45,7 +38,7 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define _main_ _init_(); void setup(){ \
-   console::start( 9600 ); _init_(); \
+   Serial.begin( 9600 ); _init_(); \
 } void loop(){ process::next(); \
 } void _init_
 
@@ -85,9 +78,7 @@ struct NODEPP_GENERATOR_BASE { protected:
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define forEach( ITEM, CB ) for( auto& x : ITEM ){ CB( x ); }
-
 #define forEver() for (;;)
-
 #define elif else if
 
 /*────────────────────────────────────────────────────────────────────────────*/
