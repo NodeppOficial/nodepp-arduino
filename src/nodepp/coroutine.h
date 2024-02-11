@@ -37,10 +37,10 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define _main_ _init_(); void setup(){ \
+#define main _init_(); void setup(){ \
    Serial.begin( 9600 ); _init_(); \
 } void loop(){ process::next(); \
-} void _init_
+}  int _init_
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
