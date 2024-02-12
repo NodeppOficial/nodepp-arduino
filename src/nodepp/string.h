@@ -240,7 +240,7 @@ public:
     void unshift( char value ) noexcept { insert( first(), value ); }
     void    push( char value ) noexcept { insert( size(), value ); }
     void               shift() noexcept { erase( first() ); }
-    void                 pop() noexcept { erase( size() ); }
+    void                 pop() noexcept { erase( last() ); }
     
     /*─······································································─*/
 
@@ -261,7 +261,7 @@ public:
         }
     }
 
-    void insert( ulong index, ulong N , char* value ) noexcept {
+    void insert( ulong index, ulong N, char* value ) noexcept {
 	    index = clamp( index, 0UL, size() );
         if( empty() ){ buffer = string::buffer( value, N ); } 
         else { ulong n=size() + N; auto n_buffer = string::buffer(n); 
@@ -272,7 +272,7 @@ public:
         }
     }
 
-    void insert( ulong index, ulong N , const char& value ) noexcept {
+    void insert( ulong index, ulong N, const char& value ) noexcept {
 	    index = clamp( index, 0UL, size() );
         if( empty() ){ buffer = string::buffer( N, value ); } 
         else { ulong n=size() + N; auto n_buffer = string::buffer(n); 

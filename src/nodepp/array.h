@@ -221,7 +221,7 @@ public: array_t() noexcept {};
     void unshift( const T& value ) noexcept { insert( first(), value ); }
     void    push( const T& value ) noexcept { insert( size(), value ); }
     void                   shift() noexcept { erase( first() ); }
-    void                     pop() noexcept { erase( size() ); }
+    void                     pop() noexcept { erase( last() ); }
      
     /*─······································································─*/
 

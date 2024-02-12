@@ -6,29 +6,39 @@
 namespace nodepp { class debug_t {     
 protected: 
 
-    string_t message; void* ev = nullptr;
+    struct _str_ { 
+        void * ev = nullptr;
+        string_t msg;
+    };  ptr_t<_str_> obj;
 
 public:
 
     virtual ~debug_t() noexcept { 
-	    console::log( message, "closed" );  
+        if ( obj.count() > 1 ){ return; }
+	    console::log( obj->msg, "closed" );  
     }
     
     /*─······································································─*/
 
-    debug_t( const string_t& msg ) noexcept {
-	    console::log( msg, "open" ); message = msg; 
+    debug_t( const string_t& msg ) noexcept : obj(new _str_()) {
+        obj->msg = msg; 
+        auto inp = type::bind( this );
+	               console::log( obj->msg, "open" );
     }
-
-    debug_t() noexcept: message("something went wrong") {}
+    
+    debug_t() noexcept : obj(new _str_()) {
+        auto inp = type::bind( this );
+        obj->msg = "something went wrong";
+	               console::log( obj->msg, "open" );
+    }
     
     /*─······································································─*/
 
     template< class... T >
     void log( const T&... args ) const noexcept { console::log( "--", args... ); }
 
-    void error() const noexcept { console::error( message ); }
-
+    void error() const noexcept { console::error( obj->msg ); }
+    
 };}
 
 /*────────────────────────────────────────────────────────────────────────────*/
