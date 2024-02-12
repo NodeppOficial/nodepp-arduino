@@ -8,6 +8,7 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#include "iterator.h"
 #include "function.h"
 #include "string.h"
 #include "array.h"
