@@ -9,15 +9,11 @@
 
 namespace nodepp { namespace console {
 
-    template< class V, class... T >
-    int scan( const V& argc, const T&... args ){ while(!Serial.available() ){}
-        return string::parse( Serial.readString().c_str(), (char*)argc, args... );
-    }
-
-    /*─······································································─*/
-
     template< class... T >
     int log( const T&... args ){ return conio::log(args...,"\n"); }
+
+    template< class... T >
+    int scan( const T&... args ){ return conio::scan( args... ); }
 
     void clear(){ conio::clear(); }
     

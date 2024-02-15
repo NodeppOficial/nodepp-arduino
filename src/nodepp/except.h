@@ -6,10 +6,10 @@
 namespace nodepp { class except_t { 
 protected: 
 
-    struct _str_ { 
+    struct NODE { 
         void * ev = nullptr;
         string_t msg;
-    };  ptr_t<_str_> obj;
+    };  ptr_t<NODE> obj;
 
 public:
 
@@ -20,19 +20,19 @@ public:
     /*─······································································─*/
 
     template< class T, class = typename type::enable_if<type::is_class<T>::value,T>::type >
-    except_t( const T& except_type ) noexcept : obj(new _str_()) {
+    except_t( const T& except_type ) noexcept : obj(new NODE()) {
         obj->msg = except_type.what();
     }
 
     /*─······································································─*/
 
-    except_t( const string_t& msg ) noexcept : obj(new _str_()) {
+    except_t( const string_t& msg ) noexcept : obj(new NODE()) {
         obj->msg = msg;
     }
 
     /*─······································································─*/
 
-    except_t() noexcept : obj(new _str_()) {
+    except_t() noexcept : obj(new NODE()) {
         obj->msg = "something went wrong";
     }
 
