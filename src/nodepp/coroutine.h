@@ -58,7 +58,7 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 #define CHUNK_SIZE 512
 #define UNBFF_SIZE 256
 #define MAX_SOCKET 10
-#define TIMEOUT    3
+#define TIMEOUT    1
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

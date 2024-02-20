@@ -4,7 +4,7 @@
 
 using namespace nodepp;
 
-void _main_() {
+onMain([](){
 
     auto t = timer::add([](){
         static int i=0; i++;
@@ -32,4 +32,4 @@ void _main_() {
 
     console::log("third promise resolved:",rej );
 
-}
+})

@@ -7,7 +7,7 @@ ulong frq = 1000;
 array_t<int> INP ({ 14 });
 array_t<int> OUT ({ 13, 12 }); 
 
-void _main_() {
+onMain([](){
     
     for( auto x : OUT ) IO::mode( x, OUTPUT );
     for( auto x : INP ) IO::mode( x, INPUT );
@@ -26,4 +26,4 @@ void _main_() {
         IO::digital::write( OUT[1], b );
     },500);
 
-}
+})

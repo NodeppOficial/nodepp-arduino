@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-void _main_() {
+onMain([](){
 
     regex_t reg("\\d+","i");
     console::log( "hola 123: ", reg.test("hola 123") ? "true" : "false" );
@@ -22,4 +22,5 @@ void _main_() {
         static int i = 0; i++; 
         console::log( i, ": ", x );
     }
-}
+
+})

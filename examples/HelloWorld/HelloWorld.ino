@@ -3,10 +3,10 @@
 
 using namespace nodepp;
 
-void _main_() {
+onMain([](){
 
     timer::interval([](){
         console::log("hello world");
     }, 100 );
 
-}
+})

@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-void _main_() {
+onMain([](){
 
     auto t = timer::interval([=](){ 
         static int i=0; i++; i%=1000;
@@ -15,4 +15,4 @@ void _main_() {
         timer::clear(t);
     },10000);
 
-}
+})
