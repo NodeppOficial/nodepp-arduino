@@ -34,6 +34,7 @@ namespace nodepp { namespace process {
     int next(){
         static int x = 0;   
     coStart
+        if( process::size() <= 0 ){ process::delay( TIMEOUT ); coGoto(0); }
 
         x = process::task::size(); while( x-->0 ){ process::task::next(); coNext; }
         x = process::loop::size(); while( x-->0 ){ process::loop::next(); coNext; }
@@ -78,7 +79,7 @@ namespace nodepp { namespace process {
         process::poll::empty() && 
         process::loop::empty() && 
         process::threads < 1 
-    ) ; }
+    );}
     
     /*─······································································─*/
 
