@@ -1,3 +1,14 @@
+/*
+ * Copyright 2023 The Nodepp Project Authors. All Rights Reserved.
+ *
+ * Licensed under the MIT (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.nodepp.xyz/license.html
+ */
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #ifndef NODEPP_PTR
 #define NODEPP_PTR
 
@@ -12,7 +23,7 @@ public:
     ptr_t( ulong n )                 noexcept { resize( n ); }
     ptr_t()                          noexcept { reset(); }
 
-    virtual ~ptr_t() noexcept { reset(); }
+    virtual ~ptr_t() noexcept { if( count()!=0 ) reset(); }
     
     /*─······································································─*/
 
@@ -34,26 +45,33 @@ public:
     bool operator>=( const ptr_t& oth ) const noexcept { return this->value_>=oth.value_; }
     bool operator< ( const ptr_t& oth ) const noexcept { return this->value_< oth.value_; }
     bool operator<=( const ptr_t& oth ) const noexcept { return this->value_<=oth.value_; }
+    bool operator==( const ptr_t& oth ) const noexcept { return this->value_==oth.value_; }
+    bool operator!=( const ptr_t& oth ) const noexcept { return this->value_!=oth.value_; }
     
     /*─······································································─*/
 
-    bool operator==( const ptr_t& B ) const noexcept { return value_ == B.value_; }
-    bool operator!=( const ptr_t& B ) const noexcept { return value_ != B.value_; }
-
-    bool operator==( T* value ) const noexcept { return value_ == value; }
-    bool operator!=( T* value ) const noexcept { return value_ != value; }
+    bool operator> ( T* value )         const noexcept { return this->value_> value; }
+    bool operator>=( T* value )         const noexcept { return this->value_>=value; }
+    bool operator< ( T* value )         const noexcept { return this->value_< value; }
+    bool operator<=( T* value )         const noexcept { return this->value_<=value; }
+    bool operator==( T* value )         const noexcept { return this->value_==value; }
+    bool operator!=( T* value )         const noexcept { return this->value_!=value; }
+    
+    /*─······································································─*/
 
     T& operator[]( ulong i ) const noexcept { return value_[i]; }
     
     /*─······································································─*/
 
     ptr_t& operator=( const ptr_t& other ) noexcept {
-        if( this->value_ != &other ){ reset(); cpy(other); }
+        if( this->value_ != &other )
+          { reset(); cpy(other); }
         return *this;
     }
 
     ptr_t& operator=( ptr_t&& other ) noexcept {
-        if( this->value_ != &other ){ reset(); mve(type::move(other)); }
+        if( this->value_ != &other )
+          { reset(); mve(type::move(other)); }
         return *this;
     }
     
@@ -117,16 +135,16 @@ public:
 
     /*─······································································─*/
 
-    ulong  size() const noexcept { return length_ == nullptr ? 0 : *length_; }
-    ulong count() const noexcept { return count_  == nullptr ? 0 : *count_; }
-    bool  empty() const noexcept { return null()  || size() <= 0 ; }
-    bool   null() const noexcept { return value_  == nullptr; }
+    ulong  size() const noexcept { return value_ == nullptr ? 0 : *length_; }
+    ulong count() const noexcept { return value_ == nullptr ? 0 : *count_; }
+    bool  empty() const noexcept { return null() || size() <= 0 ; }
+    bool   null() const noexcept { return value_ == nullptr; }
     T*     data() const noexcept { return value_; }
     T*      get() const noexcept { return value_; }
     
     /*─······································································─*/
 
-    void free()       noexcept { if( count()>=1 ){ *count_=1; } reset(); }
+    void free()       noexcept { if( count()!=0 ){ *count_=1; reset(); } }
     T*    end() const noexcept { return value_ + size(); }
     T*  begin() const noexcept { return value_; }
     

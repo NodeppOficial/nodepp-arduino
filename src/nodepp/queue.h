@@ -1,3 +1,14 @@
+/*
+ * Copyright 2023 The Nodepp Project Authors. All Rights Reserved.
+ *
+ * Licensed under the MIT (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.nodepp.xyz/license.html
+ */
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #ifndef NODEPP_QUEUE
 #define NODEPP_QUEUE
 
@@ -14,8 +25,7 @@ protected:
         explicit operator V(){ return data; }
     };
 
-    NODE*       act = nullptr;
-    ptr_t<NODE> queue;
+    ptr_t<NODE> queue; NODE* act = nullptr;
 
     ptr_t<ulong> get_slice_range( long x, long y ) const noexcept {
         

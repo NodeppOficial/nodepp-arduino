@@ -1,3 +1,14 @@
+/*
+ * Copyright 2023 The Nodepp Project Authors. All Rights Reserved.
+ *
+ * Licensed under the MIT (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.nodepp.xyz/license.html
+ */
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #ifndef NODEPP_EXCEPT
 #define NODEPP_EXCEPT
 
@@ -14,7 +25,8 @@ protected:
 public:
 
     virtual ~except_t() noexcept { 
-        if ( obj.count() > 1 ){ return; }
+   	    process::onSIGERR.off(obj->ev);
+    //  if ( obj.count() > 2 ){ return; }
     }
 
     /*─······································································─*/
@@ -22,18 +34,24 @@ public:
     template< class T, class = typename type::enable_if<type::is_class<T>::value,T>::type >
     except_t( const T& except_type ) noexcept : obj(new NODE()) {
         obj->msg = except_type.what();
+        auto inp = type::bind( this ); 
+        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/
 
     except_t( const string_t& msg ) noexcept : obj(new NODE()) {
         obj->msg = msg;
+        auto inp = type::bind( this ); 
+        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/
 
     except_t() noexcept : obj(new NODE()) {
+        auto inp = type::bind( this ); 
         obj->msg = "something went wrong";
+        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/
