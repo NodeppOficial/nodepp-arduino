@@ -19,25 +19,13 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp { namespace process {
-
-    array_t<string_t> args; int threads = 0;
+namespace nodepp { namespace process { int threads = 0;
 
     /*─······································································─*/
 
     ulong size(){ 
-        return process::poll::size() + 
-               process::task::size() + 
-               process::loop::size() + 
+        return process::task::size() +
                process::threads      ; 
-    }
-    
-    /*─······································································─*/
-
-    void start( int argc, char** args ){
-        int i=0; do {
-            process::args.push(args[i]);
-        }   while( i ++< argc - 1 );
     }
 
     /*─······································································─*/
@@ -46,18 +34,14 @@ namespace nodepp { namespace process {
         static int x = 0;   
     coStart
         if( process::size() <= 0 ){ process::delay( TIMEOUT ); coGoto(0); }
-
         x = process::task::size(); while( x-->0 ){ process::task::next(); coNext; }
-        x = process::loop::size(); while( x-->0 ){ process::loop::next(); coNext; }
-        x = process::poll::size(); while( x-->0 ){ process::poll::next(); coNext; }
-
     coStop
     }
     
     /*─······································································─*/
 
     template< class... T >
-    void add( const T&... args ){ process::loop::add( args... ); }
+    void add( const T&... args ){ process::task::add( args... ); }
 
     /*─······································································─*/
 
@@ -77,9 +61,7 @@ namespace nodepp { namespace process {
     /*─······································································─*/
 
     void clear(){ 
-        process::task::clear();
-        process::poll::clear(); 
-        process::loop::clear(); 
+        process::task::clear(); 
         process::threads = 0; 
     }
     
@@ -87,8 +69,6 @@ namespace nodepp { namespace process {
 
     bool empty(){ return ( 
         process::task::empty() && 
-        process::poll::empty() && 
-        process::loop::empty() && 
         process::threads < 1 
     );}
     

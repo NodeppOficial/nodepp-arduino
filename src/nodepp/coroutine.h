@@ -49,7 +49,6 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define onMain( ... ) void setup(){   \
-   Serial.begin( 9600 );              \
    function_t<void>( __VA_ARGS__ )(); \
 }  void loop(){ process::next(); }
 
@@ -63,8 +62,8 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define CHUNK_SIZE 512
-#define UNBFF_SIZE 256
+#define CHUNK_SIZE 256
+#define UNBFF_SIZE 128
 #define MAX_SOCKET 10
 #define TIMEOUT    1
 
