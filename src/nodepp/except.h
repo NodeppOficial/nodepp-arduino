@@ -25,7 +25,6 @@ protected:
 public:
 
     virtual ~except_t() noexcept { 
-   	    process::onSIGERR.off(obj->ev);
     //  if ( obj.count() > 2 ){ return; }
     }
 
@@ -34,24 +33,18 @@ public:
     template< class T, class = typename type::enable_if<type::is_class<T>::value,T>::type >
     except_t( const T& except_type ) noexcept : obj(new NODE()) {
         obj->msg = except_type.what();
-        auto inp = type::bind( this ); 
-        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/
 
     except_t( const string_t& msg ) noexcept : obj(new NODE()) {
         obj->msg = msg;
-        auto inp = type::bind( this ); 
-        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/
 
     except_t() noexcept : obj(new NODE()) {
-        auto inp = type::bind( this ); 
         obj->msg = "something went wrong";
-        obj->ev  = process::onSIGERR.once([=]( ... ){ inp->print(); });
     }
 
     /*─······································································─*/

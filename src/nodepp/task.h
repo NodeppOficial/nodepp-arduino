@@ -14,10 +14,10 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp { namespace process {
+namespace nodepp { namespace process { event_t<> onNext;
 
-namespace task {
-
+namespace task { 
+    
     queue_t<function_t<int>> queue;
 
     bool empty(){ return queue.empty(); }
@@ -36,7 +36,7 @@ namespace task {
         });
     } 
 
-    void next(){ onSIGNEXT.emit();
+    void next(){ onNext.emit();
         if( queue.empty() ){ return; }
           auto x = queue.get();
           int  y = x->data();
@@ -68,7 +68,7 @@ namespace loop {
         });
     }
 
-    void next(){ onSIGNEXT.emit();
+    void next(){ onNext.emit();
         if( queue.empty() ){ return; }
           auto x = queue.get();
           int  y = x->data();
@@ -100,7 +100,7 @@ namespace poll {
         });
     }
 
-    void next(){ onSIGNEXT.emit();
+    void next(){ onNext.emit();
         if( queue.empty() ){ return; }
           auto x = queue.get();
           int  y = x->data();
