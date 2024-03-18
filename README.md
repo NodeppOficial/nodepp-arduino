@@ -28,21 +28,10 @@ Hello World!
 ```
 
 ## Examples
-- Print on Terminal with  Console : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Console.cpp)
-- Colored Terminal with Conio : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Conio.cpp)
-- Async functions with Coroutines : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Coroutine.cpp)
-- Regular Expresions : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/RegExp.cpp)
-- Async Generators : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Generator.cpp)
-- Dynamic Objects : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/DynamicObject.cpp)
-- Observer Events : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Observer.cpp)
-- Async Promises : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Promises.cpp)
-- Async Events : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Event.cpp)
-- Async Tasks : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Tasks.cpp)
-- Async Timer : [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/Nodepp/Timer.cpp)
+- [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/)
 
 ## FAQ
-- reddit : [/r/Cplusplus/](https://www.reddit.com/r/Cplusplus/comments/19e2kw3/write_asynchronous_code_with_c_nodepp/) 
-- reddit : [/r/cpp/](https://www.reddit.com/r/cpp/comments/19camli/write_asynchronously_code_with_c_nodepp/)
+- reddit : [/r/Cplusplus/](https://www.reddit.com/r/Cplusplus/comments/19e2kw3/write_asynchronous_code_with_c_nodepp/)
 
 ## Contribution
 
