@@ -45,8 +45,12 @@ namespace nodepp { namespace conio {
     }
 
     /*─······································································─*/
+    
+    int set_position( int x, int y ){ return pout(string::format("\033[%d;%dH",x,y)); }
 
-    int gotoxy( int x, int y ){ return pout(string::format("\033[%d;%dH",x,y)); }
+    /*─······································································─*/
+
+    int gotoxy( int x, int y ){ return set_position( x, y ); }
     int undescore(){ return pout("\033[4m"); }
     int inverse(){ return pout("\033[7m"); }
     int reset(){ return pout("\033[0m"); }
