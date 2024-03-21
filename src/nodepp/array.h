@@ -156,7 +156,7 @@ public: array_t() noexcept {};
         for( auto& x : *this ){ if( func(x) ) return 0; } return 1;
     }
 
-    void map( function_t<void,T> func ) const noexcept { 
+    void map( function_t<void,T&> func ) const noexcept { 
         for( auto& x : *this ){ func(x); }
     }
     
@@ -178,22 +178,6 @@ public: array_t() noexcept {};
         return find( array_t( 1UL, data ), offset );
     }
 
-    /*─······································································─*/
-#ifndef ARDUINO
-
-    T max() const noexcept { T n = (*this)[0];
-        for( auto x=this->begin() + 1; x != this->end(); x++ ){
-            n = ::max( n, *x ); 
-        }   return n;
-    }
-
-    T min() const noexcept { T n = (*this)[0];
-        for( auto x=this->begin() + 1; x != this->end(); x++ ){
-            n = ::min( n, *x ); 
-        }   return n;
-    }
-    
-#endif
     /*─······································································─*/
 
     int compare( const array_t& oth ) const noexcept {

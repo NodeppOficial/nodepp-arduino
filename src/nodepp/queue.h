@@ -209,30 +209,12 @@ public: queue_t() noexcept {}
         }   return 1;
     }
 
-    void map( function_t<void,V> func ) const noexcept {
+    void map( function_t<void,V&> func ) const noexcept {
         if( empty() ){ return; } NODE* n = first(); 
         while( n!=nullptr ){ func( n->data ); n = n->next; }
     }
 
     /*─······································································─*/
-
-#ifndef ARDUINO
-
-    NODE* max() const noexcept { 
-        if( empty() ){ return nullptr; } 
-        NODE* n = first(), p = first(); while( n!=nullptr ){ 
-            if( p->data < n->data ){ p = n; } n = n->next;
-        }   return p;
-    }
-
-    NODE* min() const noexcept { 
-        if( empty() ){ return nullptr; } 
-        NODE* n = first(), p = first(); while( n!=nullptr ){ 
-            if( p->data > n->data ){ p = n; } n = n->next;
-        }   return p;
-    }
-
-#endif
     
     bool is_item( NODE* item ) const noexcept {
         auto n = first(); while( n != nullptr && item != nullptr ){
