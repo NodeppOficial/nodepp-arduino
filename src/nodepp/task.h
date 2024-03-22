@@ -20,23 +20,28 @@ namespace task {
     
     queue_t<function_t<int>> queue;
 
-    bool empty(){ return queue.empty(); }
+    void clear(){ queue.clear(); }
 
     ulong size(){ return queue.size(); }
 
-    void clear(){ queue.clear(); }
+    bool empty(){ return queue.empty(); }
+
+    void clear( void* address ){ *((bool*)( address )) = 0; }
 
     template< class T, class... V >
-    void add( T cb, const V&... arg ){ 
-        ptr_t<type::pair<bool,T>> pb = new type::pair<bool,T>({ 0, cb });
+    void* add( T cb, const V&... arg ){ 
+        ptr_t<T>    clb = new T( cb );
+        ptr_t<bool> blk = new bool(0);
+        ptr_t<bool> out = new bool(1);
         queue.push([=](){ 
-            if(pb->first){ return 1; } pb->first = 1;
-            int rs = (pb->second)(arg...);
-            pb->first = 0; return rs; 
-        });
+            if( *out==0 ){ return -1; }
+            if( *blk==1 ){ return  1; } *blk = 1;
+            int rs = (*clb) (arg...);   *blk = 0; 
+            return *out==0 ? -1 : rs; 
+        }); return (void*) &out;
     } 
 
-    void next(){ onNext.emit();
+    void next(){ onSIGNEXT.emit();
         if( queue.empty() ){ return; }
           auto x = queue.get();
           int  y = x->data();

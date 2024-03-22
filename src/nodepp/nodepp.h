@@ -41,7 +41,7 @@ namespace nodepp { namespace process { int threads = 0;
     /*─······································································─*/
 
     template< class... T >
-    void add( const T&... args ){ process::task::add( args... ); }
+    void* add( const T&... args ){ return process::task::add( args... ); }
 
     /*─······································································─*/
 
@@ -63,6 +63,10 @@ namespace nodepp { namespace process { int threads = 0;
     void clear(){ 
         process::task::clear(); 
         process::threads = 0; 
+    }
+
+    void clear( void* address ){
+         *((bool*)address) = 0;
     }
     
     /*─······································································─*/
