@@ -41,7 +41,7 @@ namespace task {
         }); return (void*) &out;
     } 
 
-    void next(){ onSIGNEXT.emit();
+    void next(){ onNext.emit();
         if( queue.empty() ){ return; }
           auto x = queue.get();
           int  y = x->data();
