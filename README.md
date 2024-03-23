@@ -37,11 +37,14 @@ Hello World!
 
 If you want to contribute to **Nodepp**, you are welcome to do so! You can contribute in several ways:
 
-- Improving the documentation
+- Buying me a Coffee
 - Reporting bugs and issues
+- Improving the documentation
 - Adding new features or improving existing ones
 - Writing tests and ensuring compatibility with different platforms
 - Before submitting a pull request, make sure to read the contribution guidelines.
+
+NOTE: We don't use STD here
 
 ## License
 
