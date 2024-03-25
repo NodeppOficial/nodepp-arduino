@@ -18,21 +18,26 @@ namespace nodepp { class except_t {
 protected: 
 
     struct NODE { 
-        void * ev = nullptr;
         string_t msg;
+        void *ev = nullptr;
     };  ptr_t<NODE> obj;
 
 public:
 
-    virtual ~except_t() noexcept { 
-    //  if ( obj.count() > 2 ){ return; }
-    }
+    virtual ~except_t() noexcept { }
 
     /*─······································································─*/
 
     template< class T, class = typename type::enable_if<type::is_class<T>::value,T>::type >
     except_t( const T& except_type ) noexcept : obj(new NODE()) {
         obj->msg = except_type.what();
+    }
+
+    /*─······································································─*/
+
+    template< class... T >
+    except_t( const T&... msg ) noexcept : obj(new NODE()) {
+        obj->msg = string::join( " ", msg... );
     }
 
     /*─······································································─*/
@@ -50,9 +55,7 @@ public:
     /*─······································································─*/
 
     const char* what() const noexcept { return obj->msg.c_str(); }
-
     operator char*() const noexcept { return (char*)what(); }
-    
     void print() const noexcept { console::error(obj->msg); } 
 
 };}
