@@ -20,7 +20,7 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 #define _EERROR( Ev, ... ) if ( Ev.empty() ){ console::error(__VA_ARGS__); } \
                            else Ev.emit( except_t(__VA_ARGS__) );
-#define _ERROR( ... )      console::error(__VA_ARGS__);
+#define _ERROR( ... )      { console::error(__VA_ARGS__); exit(1); }
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
