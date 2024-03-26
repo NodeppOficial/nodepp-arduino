@@ -45,7 +45,7 @@ namespace nodepp { namespace process { int threads = 0;
 
     /*─······································································─*/
 
-    template< class T >
+    template< class... T >
     void error( const T&... msg ){ _ERROR( msg... ); }
 
     /*─······································································─*/
