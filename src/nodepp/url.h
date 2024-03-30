@@ -108,12 +108,9 @@ namespace url {
     }
 
     string_t host( const string_t& URL ){ string_t null; 
-        regex_t _a("/\\w[^/#?]+"), _c("/"), _d("[^@]+@|@");
-        if( !is_valid(URL) ){ return null; }
-            null = _a.match( URL );
-        if( _d.test( null ) )
-          { null = _d.replace_all( null, "" ); }
-            return _c.replace_all( null, "" );
+        regex_t _a("(/|@)[^/#?@]+/");
+        if( !is_valid(URL) ){ return null; } 
+            return _a.match( URL ).slice( 1, -1 );
     }
 
     string_t hostname( const string_t& URL ){ 
@@ -124,18 +121,22 @@ namespace url {
     
     /*─······································································─*/
 
-    int port( const string_t& URL ){ regex_t _a(":\\d+$"), _b("[^\\d]+");
-        string_t _host = host( URL ); string_t _prot = protocol( URL );
-        if( _a.test( _host ) ){
-            string_t _port = _a.match( _host );
-                     _port = _b.replace_all( _port, "" );
-                     return string::to_uint( _port );
-        } else {
+    uint port( const string_t& URL ){ 
+
+        string_t _prot = protocol( URL );
+        string_t _host = host( URL ); 
+        regex_t  _a(":\\d+$");
+
+        if( !_host.empty() && _a.test( _host ) ){
+            return string::to_uint( _a.match( _host ).slice(1) );
+        } elif( !_prot.empty() ) {
             for( ulong i=0; i<prot.size(); i++ ) {
-                regex_t _a(prot[i]); 
-            if ( _a.test( _prot ) ){ return prts[i]; }
+             if( _prot.find( prot[i] ) != nullptr )
+               { return prts[i]; }
             }
-        }   return 8000;
+        }   
+        
+        return 8000;
     }
     
     /*─······································································─*/

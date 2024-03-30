@@ -33,7 +33,30 @@ public:
     /*─······································································─*/
 
     template < class V, ulong N > 
+    ptr_t& operator=( const V (&value)[N] ) noexcept { 
+        ulong s = 0; this->resize( N ); 
+        for( auto x=begin(); x!=end(); x++ )
+           { (*x) = (T)value[s]; s++; } return *this;
+    }
+
+    template < class V, ulong N > 
     ptr_t ( const V (&value)[N] ) noexcept { 
+        ulong s = 0; this->resize( N ); 
+        for( auto x=begin(); x!=end(); x++ )
+           { (*x) = (T)value[s]; s++; } 
+    }
+    
+    /*─······································································─*/
+
+    template < ulong N > 
+    ptr_t& operator=( const T (&value)[N] ) noexcept { 
+        ulong s = 0; this->resize( N ); 
+        for( auto x=begin(); x!=end(); x++ )
+           { (*x) = value[s]; s++; } return *this;
+    }
+
+    template < ulong N > 
+    ptr_t ( const T (&value)[N] ) noexcept { 
         ulong s = 0; this->resize( N ); 
         for( auto x=begin(); x!=end(); x++ )
            { (*x) = value[s]; s++; } 
