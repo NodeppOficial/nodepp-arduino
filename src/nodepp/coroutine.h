@@ -48,9 +48,9 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define onMain( ... ) void setup(){        \
-   process::begin(); Serial.begin( 9600 ); \
+   process::start(); Serial.begin( 9600 ); \
    function_t<void>( __VA_ARGS__ )();      \
-   process::end();                         \
+   process::stop();                        \
 }  void loop(){ /* nothing here */ }
 
 /*────────────────────────────────────────────────────────────────────────────*/

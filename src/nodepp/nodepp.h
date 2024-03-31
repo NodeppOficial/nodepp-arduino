@@ -25,12 +25,12 @@ namespace nodepp { namespace process {
 
     /*─······································································─*/
 
-    void begin(){ /* nothing here */ }
+    void start(){ /* nothing here */ }
 
-    void begin( int argc, char** args ){
+    void start( int argc, char** args ){
         int i=0; do {
             process::args.push( args[i] );
-        }   while( i ++< argc - 1 ); process::begin();
+        }   while( i ++< argc - 1 ); process::start();
     }
 
     /*─······································································─*/
@@ -88,7 +88,7 @@ namespace nodepp { namespace process {
     
     /*─······································································─*/
 
-    void end(){
+    void stop(){
         while( !process::empty() )
                 process::next();
     }
