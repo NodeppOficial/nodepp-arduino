@@ -19,7 +19,19 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp { namespace process { int threads = 0;
+namespace nodepp { namespace process {
+
+    array_t<string_t> args; int threads = 0; 
+
+    /*─······································································─*/
+
+    void begin(){ /* nothing here */ }
+
+    void begin( int argc, char** args ){
+        int i=0; do {
+            process::args.push( args[i] );
+        }   while( i ++< argc - 1 ); process::begin();
+    }
 
     /*─······································································─*/
 
@@ -76,7 +88,7 @@ namespace nodepp { namespace process { int threads = 0;
     
     /*─······································································─*/
 
-    void run(){
+    void end(){
         while( !process::empty() )
                 process::next();
     }

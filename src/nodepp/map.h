@@ -18,7 +18,7 @@ namespace nodepp { template<class U, class V>
 class map_t { 
 protected:
 
-    using T = type::pair<U,V>;
+    using T = type::pair< U, V >;
 
     struct NODE {
         queue_t<T> queue;
