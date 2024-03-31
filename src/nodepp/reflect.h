@@ -18,31 +18,30 @@ namespace nodepp { class reflect_t {
 protected:
 
     using T = type::pair< string_t, void* >;
-    queue_t<T> fields;
+
+    struct NODE {
+        queue_t<T> fields;
+    };  ptr_t<NODE> obj;
 
 public:
 
     /*─······································································─*/
 
-    reflect_t () noexcept = default;
+    reflect_t () noexcept : obj( new NODE() ) {}
 
     /*─······································································─*/
 
     template < typename V >
-    void reflect_field( const string_t& name, V& value ) noexcept {
-         fields.push({ name, type::cast<void>( &value ) });
+    void reflect_field( const string_t& name, V& value ) const noexcept {
+         obj->fields.push({ name, type::cast<void>( &value ) });
     }
 
     /*─······································································─*/
 
-    void keys( function_t<void,string_t&> callback ) const noexcept {
-         fields.map([=]( T& data ){ callback( data.first ); });
-    }
-
-    array_t<string_t> get_keys() const noexcept {
-        array_t<string_t> res ( fields.size() );
-        ulong n=0; keys([&]( string_t& data ){
-            res[n] = data; n++;
+    array_t<string_t> keys() const noexcept {
+        array_t<string_t> res ( obj->fields.size() );
+        ulong n=0; obj->fields.map([&]( T& data ){
+            res[n] = data.first; n++;
         }); return res;
     }
 
@@ -50,23 +49,21 @@ public:
 
     template < class V, class = typename type::enable_if<!type::is_pointer<V>::value,V>::type >
     V& get_field( const string_t& fieldName ) const {
-        auto x = fields.first(); while( x != nullptr ) {
+        auto x = obj->fields.first(); while( x != nullptr ) {
             if( x->data.first == fieldName )
                  return *type::cast<V>( x->data.second );
             else x = x->next;
-        }   process::error( "Field not found [",fieldName,"]" );
+        }   throw except_t( "Field not found [",fieldName,"]" );
     }
 
     template < class V, class = typename type::enable_if<type::is_pointer<V>::value,V>::type >
     V* get_field( const string_t& fieldName ) const {
-        auto x = fields.first(); while( x != nullptr ) {
+        auto x = obj->fields.first(); while( x != nullptr ) {
             if( x->data.first == fieldName )
                  return type::cast<V>( x->data.second );
             else x = x->next;
-        }   process::error( "Field not found [",fieldName,"]" );
+        }   throw except_t( "Field not found [",fieldName,"]" );
     }
-
-    /*─······································································─*/
 
 };}
 
