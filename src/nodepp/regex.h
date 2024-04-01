@@ -86,7 +86,7 @@ protected:
 
             if( (ulong) pos[1] >= str.size() ){ goto DONE; }
 
-            if( obj->_data[0] == '(' ){
+            if( (uchar) obj->_data[0] == '(' ){
                 regex_t   reg( obj->_data.slice(1) );
                 auto idx = reg._search( str,pos[1] );
                   if ( idx == nullptr ){ goto DONE; }
@@ -94,7 +94,7 @@ protected:
                        off[1]+= idx[1]-idx[0];
                        goto LESS; 
                      }
-            } elif( obj->_data[0] == '[' ) {
+            } elif( (uchar) obj->_data[0] == '[' ) {
                 
                 auto    x = obj->_data[1] == '^' ? 2 : 1;
                 auto list = compile_range(obj->_data.slice(x));
@@ -104,12 +104,12 @@ protected:
                 elif ( x == 1 && list.some([&]( char itm ){ return str[pos[1]] == itm; }))
                      { off[1]++; goto LESS; } goto DONE;
 
-            } elif( obj->_data[0] == '\0' ) {
+            } elif( (uchar) obj->_data[0] == '\0' ) {
                                  goto CLSE;
-            } elif( obj->_data[0] <= '\2' ) {
+            } elif( (uchar) obj->_data[0] <= '\2' ) {
                 if( compile_flg( obj->_data[0], str, pos[1] ) )
                   { goto SKIP; } goto DONE;
-            } elif( obj->_data[0] <= '\13' ) {
+            } elif( (uchar) obj->_data[0] <= '\13' ) {
                 if( compile_cmd( obj->_data[0], str, pos[1] ) )
                   { off[1]++; goto LESS; } 
                               goto DONE;
