@@ -58,18 +58,22 @@ public:    observer_t() noexcept {}
     observer_t( const P (&args) [N] ) noexcept { 
         node = array_t<T>( N ); for( ulong x=N; x--; ){ 
         node[x].second = args[x].second;
-        node[x].first = args[x].first; 
+        node[x].first  = args[x].first; 
         }
     }
     
     /*─······································································─*/
+
+    void off( void* address ) const noexcept { 
+        if( address != nullptr ) *((int*)address) = -1; 
+    }
 
     template< class F >
     void* once( const U& name, F func ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 return node[x].third.once( func );
-        }       return 0;
+        }       return nullptr;
     }
 
     template< class F >
@@ -77,14 +81,7 @@ public:    observer_t() noexcept {}
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
                 return node[x].third.on( func );
-        }       return 0;
-    }
-
-    void off( const U& name, void* id ) const noexcept {
-        for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-                node[x].third.off( id );
-        }
+        }       return nullptr;
     }
     
     /*─······································································─*/
@@ -127,6 +124,20 @@ public:    observer_t() noexcept {}
 
     const T* begin() const noexcept { return node.begin(); }
     const T*   end() const noexcept { return node.end();   }
+    
+    /*─······································································─*/
+
+    void clear( string_t name ) const noexcept { 
+        for( ulong x=0; x<node.size(); x++ ){
+            if( node[x].first == name )
+              { node[x].second.clear(); }
+        }
+    }
+
+    void clear() const noexcept { 
+        for( ulong x=0; x<node.size(); x++ )
+           { node[x].second.clear(); }
+    }
     
     /*─······································································─*/
 
