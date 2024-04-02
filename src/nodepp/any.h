@@ -47,6 +47,9 @@ public: any_t() noexcept {};
         T any; if( any_ptr == nullptr ) return T();
         any_ptr->get((void*)&any); return any; 
     }
+
+    template< class T >
+    T as() const noexcept { return get<T>(); }
     
     /*─······································································─*/
 

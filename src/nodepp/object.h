@@ -89,8 +89,12 @@ public:
 
     /*─······································································─*/
 
+    template< class U > U as() const noexcept { return obj->mem.as<U>(); }
+
     template< class U >
-    explicit operator U() const noexcept { return obj->mem.get<U>(); }
+    explicit operator U() const noexcept { return obj->mem.as<U>(); }
+
+    /*─······································································─*/
 
     object_t& operator[]( const string_t& name ) const noexcept {
         auto mem = obj->mem.get<ARRAY>();

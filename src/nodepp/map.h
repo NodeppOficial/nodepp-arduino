@@ -60,6 +60,18 @@ public:
 
     /*─······································································─*/
 
+    array_t<U> keys() const noexcept {
+        array_t<U> result;
+
+        obj->queue.map([&]( T& items ){
+            result.push( items.first );
+        });
+
+        return result;
+    }
+
+    /*─······································································─*/
+
     void map( function_t<void,T&> callback ) const noexcept {
          obj->queue.map( callback );
     }

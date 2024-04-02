@@ -33,6 +33,9 @@ public:
     template< class T >
     T get() const noexcept { return any_t::get<T>(); }
 
+    template< class T >
+    T as() const noexcept { return any_t::as<T>(); }
+
     template< class T > void set( const T& f ) { 
         idx = is_valid( f ); any_t::set( f );
     }
