@@ -64,12 +64,12 @@ public:
     
     /*─······································································─*/
 
-    bool operator> ( const ptr_t& oth ) const noexcept { return this->value_> oth.value_; }
-    bool operator>=( const ptr_t& oth ) const noexcept { return this->value_>=oth.value_; }
-    bool operator< ( const ptr_t& oth ) const noexcept { return this->value_< oth.value_; }
-    bool operator<=( const ptr_t& oth ) const noexcept { return this->value_<=oth.value_; }
-    bool operator==( const ptr_t& oth ) const noexcept { return this->value_==oth.value_; }
-    bool operator!=( const ptr_t& oth ) const noexcept { return this->value_!=oth.value_; }
+    bool operator> ( ptr_t& oth ) const noexcept { return this->value_> oth.value_; }
+    bool operator>=( ptr_t& oth ) const noexcept { return this->value_>=oth.value_; }
+    bool operator< ( ptr_t& oth ) const noexcept { return this->value_< oth.value_; }
+    bool operator<=( ptr_t& oth ) const noexcept { return this->value_<=oth.value_; }
+    bool operator==( ptr_t& oth ) const noexcept { return this->value_==oth.value_; }
+    bool operator!=( ptr_t& oth ) const noexcept { return this->value_!=oth.value_; }
     
     /*─······································································─*/
 
