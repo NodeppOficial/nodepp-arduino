@@ -48,22 +48,6 @@ public:
     
     /*─······································································─*/
 
-    template < ulong N > 
-    ptr_t& operator=( const T (&value)[N] ) noexcept { 
-        ulong s = 0; this->resize( N ); 
-        for( auto x=begin(); x!=end(); x++ )
-           { (*x) = value[s]; s++; } return *this;
-    }
-
-    template < ulong N > 
-    ptr_t ( const T (&value)[N] ) noexcept { 
-        ulong s = 0; this->resize( N ); 
-        for( auto x=begin(); x!=end(); x++ )
-           { (*x) = value[s]; s++; } 
-    }
-    
-    /*─······································································─*/
-
     bool operator> ( ptr_t& oth ) const noexcept { return this->value_> oth.value_; }
     bool operator>=( ptr_t& oth ) const noexcept { return this->value_>=oth.value_; }
     bool operator< ( ptr_t& oth ) const noexcept { return this->value_< oth.value_; }
