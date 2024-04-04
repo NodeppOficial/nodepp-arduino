@@ -49,14 +49,6 @@ protected:
     }
 
 public: array_t() noexcept {};
-    
-    /*─······································································─*/
-
-    array_t( T* value ) noexcept {
-        if( value == nullptr ){ return; } ulong n = 0; 
-        while( ( !value[n] ) && n < sizeof(value) )
-             { n++; } buffer = ptr_t<T>( value, n );
-    }
 
     array_t( const ptr_t<T>& argc ) noexcept { buffer = argc; }
 
@@ -64,7 +56,7 @@ public: array_t() noexcept {};
         if( n == 0 ){ return; } buffer = ptr_t<T>( n, c );
     }
 
-    array_t( T* value, const ulong& n ) noexcept { 
+    array_t( T* value, const ulong& n=0 ) noexcept { 
         if( value == nullptr || n == 0 ){ return; } 
         buffer = ptr_t<T>( value, n );
     }
