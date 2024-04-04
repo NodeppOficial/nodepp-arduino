@@ -94,34 +94,6 @@ public: queue_t() noexcept {}
     
     /*─······································································─*/
 
-    template< ulong N >
-    queue_t& operator=( const V (&value) [N] ) noexcept {
-        NODE* n = &queue; for( ulong i=0; i<N; i++ ){ 
-            if( n == nullptr ){ 
-                queue = new NODE( value[i] ); 
-                    n = &queue; 
-            } else {
-                n->next = new NODE( value[i] );
-                n->next->prev = n; n = n->next;
-            }
-        }   return *this;
-    }
-
-    template < ulong N >
-    queue_t( const V (&value)[N] ) noexcept { 
-        NODE* n = &queue; for( ulong i=0; i<N; i++ ){ 
-            if( n == nullptr ){ 
-                queue = new NODE( value[i] ); 
-                    n = &queue; 
-            } else {
-                n->next = new NODE( value[i] );
-                n->next->prev = n; n = n->next;
-            }
-        }
-    }
-    
-    /*─······································································─*/
-
     template < class T >
     queue_t( const T* value, ulong N ) noexcept { 
         if( value == nullptr || N == 0 ){ return; }
@@ -140,7 +112,7 @@ public: queue_t() noexcept {}
 
     bool empty() const noexcept { return queue == nullptr ? 1 : size() <= 0; }
 
-    ulong size() const noexcept { 
+    ulong size() const noexcept {
            if( queue == nullptr ){ return 0; } NODE* n = &queue; ulong i = 1; 
         while( n->next != nullptr ){ n = n->next; i++; } return i;
     }

@@ -79,22 +79,6 @@ public: array_t() noexcept {};
     
     /*─······································································─*/
 
-    template< ulong N >
-    array_t& operator=( const T (&value) [N] ) noexcept {
-        ulong s = 0; buffer = ptr_t<T>( N ); 
-        for( auto x=begin(); x!=end(); x++ )
-           { (*x) = value[s]; s++; } return *this;
-    }
-
-    template < ulong N > 
-    array_t( const T (&value)[N] ) noexcept { 
-        ulong s = 0; buffer = ptr_t<T>( N ); 
-        for( auto x=begin(); x!=end(); x++ )
-           { (*x) = value[s]; s++; } 
-    }
-    
-    /*─······································································─*/
-
     T*   end() const noexcept { return &buffer + size(); }
     T* begin() const noexcept { return &buffer; }
     

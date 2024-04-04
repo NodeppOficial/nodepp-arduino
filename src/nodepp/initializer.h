@@ -68,20 +68,6 @@ namespace nodepp { template< class T > class initializer_t : public ptr_t<T> {
     }
 
     /*─······································································─*/
-
-    template< ulong N >
-    initializer_t& operator=( const T (&arr) [N] ) noexcept {
-        this->resize( N ); for( ulong i=0; i<N; i++ )
-            { this->value_[i] = arr[i]; } return (*this);
-    }
-    
-    template< ulong N >
-    initializer_t( const T (&arr) [N] ) noexcept {
-        this->resize( N ); for( ulong i=0; i<N; i++ )
-            { this->value_[i] = arr[i]; }
-    }
-
-    /*─······································································─*/
     
     initializer_t( const ptr_t<T>& arr ) noexcept : ptr_t<T>( arr ) {}
 
