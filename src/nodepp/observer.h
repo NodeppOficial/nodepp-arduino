@@ -130,13 +130,13 @@ public:    observer_t() noexcept {}
     void clear( string_t name ) const noexcept { 
         for( ulong x=0; x<node.size(); x++ ){
             if( node[x].first == name )
-              { node[x].second.clear(); }
+              { node[x].third.clear(); }
         }
     }
 
     void clear() const noexcept { 
         for( ulong x=0; x<node.size(); x++ )
-           { node[x].second.clear(); }
+           { node[x].third.clear(); }
     }
     
     /*─······································································─*/
