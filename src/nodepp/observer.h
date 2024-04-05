@@ -51,16 +51,14 @@ public:    observer_t() noexcept {}
         node = array_t<T>( N ); for( ulong x=N; x--; ){ 
         node[x].second = args[x].second; 
         node[x].first  = args[x].first;
-        } return *this;
-    }
+    } return *this; }
 
     template< ulong N >
     observer_t( const P (&args) [N] ) noexcept { 
         node = array_t<T>( N ); for( ulong x=N; x--; ){ 
         node[x].second = args[x].second;
         node[x].first  = args[x].first; 
-        }
-    }
+    }}
     
     /*─······································································─*/
 
@@ -71,22 +69,22 @@ public:    observer_t() noexcept {}
     template< class F >
     void* once( const U& name, F func ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-                return node[x].third.once( func );
-        }       return nullptr;
+        if ( node[x].first == name )
+             return node[x].third.once( func );
+        }    return nullptr;
     }
 
     template< class F >
     void* on( const U& name, F func ) const noexcept {
         for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-                return node[x].third.on( func );
-        }       return nullptr;
+        if ( node[x].first == name )
+             return node[x].third.on( func );
+        }    return nullptr;
     }
     
     /*─······································································─*/
     
-    void set( function_t<observer_t,observer_t> func ) const noexcept {
+    void set( function_t<observer_t,observer_t> func ) const {
         observer_t obj = func( *this ); for( auto x : obj )
             this->set( x.first, x.second );
     }
@@ -94,30 +92,30 @@ public:    observer_t() noexcept {}
     /*─······································································─*/
 
     template< class F >
-    void set( const U& name, const F& value ) const noexcept {
+    void set( const U& name, const F& value ) const {
         for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name ){
-                node[x].third.emit( node[x].second, value );
-                node[x].second = value;
-            }
-        }
+         if( node[x].first == name ){
+             node[x].third.emit( node[x].second, value );
+             node[x].second = value; return;
+        }}   process::error("field not found:",name);
     }
     
     /*─······································································─*/
     
     template< class V, ulong N >
-    void set( const V (&args) [N] ) const noexcept {
-        for( ulong x=0; x<N; x++ )
-             this->set( args[x].first, args[x].second );
+    void set( const V (&args) [N] ) const {
+         for( ulong x=0; x<N; x++ )
+              this->set( args[x].first, args[x].second );
     }
 
     /*─······································································─*/
 
-    const V get( const U& name ) const noexcept {
+    const V get( const U& name ) const {
         for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-                return node[x].second;
-        }       return (const V)(0);
+        if ( node[x].first == name )
+             return node[x].second;
+        }    process::error( "field not found:", name ); 
+             return (const V)(0);
     }
 
     /*─······································································─*/
@@ -129,8 +127,8 @@ public:    observer_t() noexcept {}
 
     void clear( string_t name ) const noexcept { 
         for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-              { node[x].third.clear(); }
+        if ( node[x].first == name )
+           { node[x].third.clear(); }
         }
     }
 
@@ -141,13 +139,10 @@ public:    observer_t() noexcept {}
     
     /*─······································································─*/
 
-    const V operator[]( const U& name ) const noexcept {
-        for( ulong x=0; x<node.size(); x++ ){
-            if( node[x].first == name )
-            return node[x].second;
-        }   return (const V)(0);
+    const V operator[]( const U& name ) const {
+        return get( name );
     }
-
+    
 };}
 
 /*────────────────────────────────────────────────────────────────────────────*/

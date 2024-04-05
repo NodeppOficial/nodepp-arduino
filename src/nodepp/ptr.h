@@ -168,7 +168,7 @@ public:
     T* operator->() const noexcept { return  value_; }
     T& operator*()  const noexcept { return *value_; }
     T* operator&()  const noexcept { return  value_; }
-    
+
     /*─······································································─*/
 
 protected:

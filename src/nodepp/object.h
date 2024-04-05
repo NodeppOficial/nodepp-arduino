@@ -63,12 +63,13 @@ namespace nodepp { class object_t {
 private:
 
     using T     = type::pair<string_t,object_t>;
-    using ARRAY = array_t<T>;
+    using ARRAY = queue_t<T>;
 
 protected: 
 
     struct NODE {
-        int   type;
+        int   type = 0;
+        bool   val = 0;
         any_t  mem;
     };  ptr_t<NODE> obj;
 
@@ -76,42 +77,55 @@ public:
 
     template< ulong N > 
     object_t( const T (&arr) [N] ) noexcept : obj(new NODE()) { 
-        ARRAY mem (N); for( ulong x=N; x--; ){ mem[x] = arr[x]; } 
-        obj->mem = mem; obj->type = 20;
+        ARRAY mem; for( ulong x=N; x--; ){ mem.push( arr[x] ); }
+        obj->mem = mem; obj->type = 20; obj->val = 1;
     }
 
     template< class U > 
     object_t( const U& any ) noexcept : obj(new NODE()) { 
-        obj->mem = any; obj->type = obj_type_id<U>::value;
+        obj->type = obj_type_id<U>::value;
+        obj->mem  = any; obj->val = 1;
     }
     
-    object_t() noexcept : obj( new NODE() ) {}
+    object_t() noexcept : obj( new NODE() ) {
+        obj->val = 0;
+    }
 
     /*─······································································─*/
-
-    template< class U > U as() const noexcept { return obj->mem.as<U>(); }
 
     template< class U >
     explicit operator U() const noexcept { return obj->mem.as<U>(); }
 
+    bool has_value() const noexcept { return obj->val; }
+
+    template< class U > 
+    U as() const noexcept { return obj->mem.as<U>(); }
+
     /*─······································································─*/
 
-    object_t& operator[]( const string_t& name ) const noexcept {
-        auto mem = obj->mem.get<ARRAY>();
+    object_t& operator[]( const string_t& name ) const {
+        if( !has_value() || obj->type != 20 )
+          { process::error( name, "is not a object" ); }
 
-        for( ulong x=0; x<mem.size(); x++ ){
-         if( mem[x].first == string::to_string(name) )
-             return mem[x].second;
-        }    T item ({ name, 0 }); mem.push( item ); 
-        
-        obj->mem = mem; obj->type = 20;
-        return mem[mem.last()].second;
+        auto mem = type::cast<ARRAY>(obj->mem);
+        auto x   = mem.first();
+
+        while( x != nullptr ){ auto y = x->next;
+           if( x->data.first == string::to_string(name) )
+             { return x->data.second; }
+           if(!x->data.second.has_value() )
+             { mem.erase(x); } x = y;
+        }    
+
+        T item ({ name, object_t() }); mem.push( item ); 
+        obj->mem = mem; obj->type = 20; obj->val = 1; 
+        return mem.last()->data.second;
     }
 
     /*─······································································─*/
 
     array_t<string_t> keys() const noexcept { array_t<string_t> res;
-        if( obj->type == 20 ){ auto mem = obj->mem.get<ARRAY>();
+        if( obj->type == 20 ){ auto mem = obj->mem.as<ARRAY>();
             mem.map([&]( T item ){ res.push( item.first ); });
         }   return res;
     }
@@ -121,11 +135,12 @@ public:
     /*─······································································─*/
 
     void erase( const string_t& name ) const noexcept {
-        auto mem = obj->mem.get<ARRAY>();
+        auto mem = obj->mem.as<ARRAY>();
+        auto x   = mem.first();
 
-        for( ulong x=0; x<mem.size(); x++ ) {
-         if( mem[x].first == string::to_string(name) )
-             mem.erase( x );
+        while( x != nullptr ) { auto y = x->next;
+           if( x->data.first == string::to_string(name) )
+             { mem.erase( x ); } x = y;
         } 
 
     }
