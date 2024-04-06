@@ -231,7 +231,7 @@ public: array_t() noexcept {};
         }
     }
 
-    void insert( ulong index, ulong N , T* value ) noexcept {
+    void insert( ulong index, ulong N, T* value ) noexcept {
 	    index = clamp( index, 0UL, size() );
         if( empty() ){ buffer = ptr_t<T> ( value, N ); } 
         else { ulong n=size() + N; auto n_buffer = ptr_t<T>(n); 
@@ -242,7 +242,7 @@ public: array_t() noexcept {};
         }
     }
 
-    void insert( ulong index, ulong N , const T& value ) noexcept {
+    void insert( ulong index, ulong N, const T& value ) noexcept {
 	    index = clamp( index, 0UL, size() );
         if( empty() ){ buffer = ptr_t<T> ( N, value ); } 
         else { ulong n=size() + N; auto n_buffer = ptr_t<T>(n); 

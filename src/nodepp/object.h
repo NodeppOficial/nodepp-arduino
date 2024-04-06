@@ -105,7 +105,7 @@ public:
 
     object_t& operator[]( const string_t& name ) const {
         if( !has_value() || obj->type != 20 )
-          { process::error( name, "is not a object" ); }
+          { process::error( name, "is not an object" ); }
 
         auto mem = type::cast<ARRAY>(obj->mem);
         auto x   = mem.first();
