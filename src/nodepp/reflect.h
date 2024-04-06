@@ -47,21 +47,26 @@ public:
 
     /*─······································································─*/
 
-    template < class V, class = typename type::enable_if<!type::is_pointer<V>::value,V>::type >
-    V& get_field( const string_t& fieldName ) const {
+    template< class U, class V >
+    void set_value( const string_t& fieldName, const V& value ) const {
         auto x = obj->fields.first(); while( x != nullptr ) {
-            if( x->data.first == fieldName )
-                 return *type::cast<V>( x->data.second );
-            else x = x->next;
+        auto y = x->next;            
+            if( x->data.first == fieldName ){
+                auto data = type::cast<U>( x->data.second );
+                    *data = (U)(value); return;
+            }        x = y;
         }   throw except_t( "Field not found [",fieldName,"]" );
     }
 
-    template < class V, class = typename type::enable_if<type::is_pointer<V>::value,V>::type >
-    V* get_field( const string_t& fieldName ) const {
+    /*─······································································─*/
+
+    template < class V, class = typename type::enable_if<!type::is_pointer<V>::value,V>::type >
+    V& get_field( const string_t& fieldName ) const {
         auto x = obj->fields.first(); while( x != nullptr ) {
-            if( x->data.first == fieldName )
-                 return type::cast<V>( x->data.second );
-            else x = x->next;
+        auto y = x->next;      
+            if( x->data.first == fieldName ){
+                 return *type::cast<V>( x->data.second );
+            }    x = y;
         }   throw except_t( "Field not found [",fieldName,"]" );
     }
 
