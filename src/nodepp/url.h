@@ -65,10 +65,10 @@ namespace url {
     /*─······································································─*/
 
     string_t auth( const string_t& URL ){ string_t null; 
-        regex_t _a("\\w+:\\w+@");
+        regex_t _a("//\\w+:\\w+@");
         if( !is_valid(URL) || !_a.test( URL ) ) 
           { return null; } null = _a.match( URL );
-            return null.slice( 0, -1 );
+            return null.slice( 2, -1 );
     }
 
     string_t user( const string_t& URL ){ string_t null; 
@@ -107,10 +107,13 @@ namespace url {
 	         return null.empty() ? "/" : null;
     }
 
-    string_t host( const string_t& URL ){ string_t null; 
-        regex_t _a("(/|@)[^/#?@]+/");
-        if( !is_valid(URL) ){ return null; } 
-            return _a.match( URL ).slice( 1, -1 );
+    string_t host( const string_t& URL ){ 
+        regex_t _a("(/|@)[^/#?]+");
+        if(!is_valid(URL) ){ return nullptr; }
+            auto data = _a.match( URL ).slice(1);
+        if( regex::test( data, "@" ) )
+             return regex::replace( data, "[^@]+@", "" );
+        else return data;
     }
 
     string_t hostname( const string_t& URL ){ 

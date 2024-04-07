@@ -84,7 +84,7 @@ protected:
 
         CHCK:
 
-            if( (ulong) pos[1] >= str.size() ){ goto DONE; }
+            if( (ulong) pos[1] > str.size() ){ goto DONE; }
 
             if( (uchar) obj->_data[0] == '(' ){
                 regex_t   reg( obj->_data.slice(1) );
@@ -134,7 +134,8 @@ protected:
         DONE:
 
             if( (ulong) pos[1] >= str.size() ){
-                  if( pos[2] >=obj->_rep[0] ){ goto CLSE; } goto FAIL;
+                  if( pos[2] > obj->_rep[1] ){ goto CLSE; }
+                elif( pos[2] >=obj->_rep[0] ){ goto CLSE; } goto FAIL;
             } elif( pos[2] == 0 && obj->_rep[0] == 0 ){
                   goto SKIP;
             } elif( obj->_rep[1] == -1 ){
@@ -170,8 +171,8 @@ protected:
     /*─······································································─*/
 
     bool compile_flg( char& flg, string_t& data, int pos ) const noexcept {
-           if( flg == '\1' && ((ulong)pos >= data.size()-1) ){ return true; }
-         elif( flg == '\2' &&         pos == 0 )             { return true; } return false;
+          if( flg == '\1' && ((ulong)pos >= data.size()-1) ){ return true; }
+        elif( flg == '\2' &&         pos == 0 )             { return true; } return false;
     }
     
     /*─······································································─*/
