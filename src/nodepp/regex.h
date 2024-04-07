@@ -84,7 +84,7 @@ protected:
 
         CHCK:
 
-            if( (ulong) pos[1] > str.size() ){ goto DONE; }
+            if( (ulong) pos[1] >= str.size() ){ goto DONE; }
 
             if( (uchar) obj->_data[0] == '(' ){
                 regex_t   reg( obj->_data.slice(1) );
@@ -329,8 +329,8 @@ public: regex_t () noexcept : obj( new NODE() ) {}
 
     string_t match( const string_t& _str, ulong s=0 ) const noexcept { 
         auto idx = search( _str, s );
-        if( idx == nullptr )  { return ""; }
-        if( idx[0] == idx[1] ){ return ""; }
+        if( idx == nullptr )  { return nullptr; }
+        if( idx[0] == idx[1] ){ return nullptr; }
             return _str.slice( idx[0], idx[1] );
     }
     

@@ -128,8 +128,6 @@ public: queue_t() noexcept {}
     
     /*─······································································─*/
 
-//  NODE* operator&( void ) const noexcept { return act==nullptr ? first() : act; }
-
     NODE* operator[]( ulong idx ) noexcept { return this->get( idx ); }
     
     /*─······································································─*/

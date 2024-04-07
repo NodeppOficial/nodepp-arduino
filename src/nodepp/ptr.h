@@ -57,12 +57,12 @@ public:
     
     /*─······································································─*/
 
-    bool operator> ( T* value )         const noexcept { return this->value_> value; }
-    bool operator>=( T* value )         const noexcept { return this->value_>=value; }
-    bool operator< ( T* value )         const noexcept { return this->value_< value; }
-    bool operator<=( T* value )         const noexcept { return this->value_<=value; }
-    bool operator==( T* value )         const noexcept { return this->value_==value; }
-    bool operator!=( T* value )         const noexcept { return this->value_!=value; }
+    bool operator> ( T* value )   const noexcept { return this->value_> value; }
+    bool operator>=( T* value )   const noexcept { return this->value_>=value; }
+    bool operator< ( T* value )   const noexcept { return this->value_< value; }
+    bool operator<=( T* value )   const noexcept { return this->value_<=value; }
+    bool operator==( T* value )   const noexcept { return this->value_==value; }
+    bool operator!=( T* value )   const noexcept { return this->value_!=value; }
     
     /*─······································································─*/
 
@@ -114,7 +114,8 @@ public:
         }   while( n-->0 ) value_[n] = c;
     }
 
-    void resize( T* c, ulong n ) noexcept { reset(); 
+    void resize( T* c, ulong n ) noexcept { reset();
+        if( c == nullptr ){ return; }
         length_= new ulong( n ); 
         count_ = new ulong( 1 );
         value_ = c;
@@ -130,15 +131,16 @@ public:
     /*─······································································─*/
 
     void reset() noexcept {
-        if( count() == 0 ){ return; }
+        if( value_  == nullptr ){ return; }
 
-        if( --(*count_) == 0 ) {
-            if( size( ) == 0 ) {
+        if( count() != 0 )      {
+        if( --(*count_) == 0 )  {
+            if(*length_ == 0 )  {
                      delete    value_;
             } else { delete [] value_; }
                      delete    count_;
                      delete   length_;
-        }
+        }}
 
         length_= nullptr;
         count_ = nullptr;
@@ -147,22 +149,23 @@ public:
 
     /*─······································································─*/
 
-    ulong  size() const noexcept { return value_ == nullptr ? 0 : *length_; }
-    ulong count() const noexcept { return value_ == nullptr ? 0 : *count_; }
-    bool  empty() const noexcept { return null() || size() <= 0 ; }
-    bool   null() const noexcept { return value_ == nullptr; }
-    T*     data() const noexcept { return value_; }
-    T*      get() const noexcept { return value_; }
+    ulong     size() const noexcept { return  null() ? 0 : *length_; }
+    ulong    count() const noexcept { return  null() ? 0 : *count_;  }
+    bool     empty() const noexcept { return  null() || size()==0 ;  }
+    bool      null() const noexcept { return  value_ == nullptr;     }
+    bool has_value() const noexcept { return !null(); }
+    T*        data() const noexcept { return  value_; }
+    T*         get() const noexcept { return  value_; }
     
     /*─······································································─*/
 
     T*    end() const noexcept { return value_ + size(); }
-    void free()       noexcept { *count_ = 1; reset(); }
     T*  begin() const noexcept { return value_; }
+    void free() const noexcept { *count_ = 0; }
     
     /*─······································································─*/
 
-    explicit operator bool(void) const { return null(); }
+    explicit operator bool(void) const { return has_value(); }
     explicit operator   T*(void) const { return value_; }
 
     T* operator->() const noexcept { return  value_; }

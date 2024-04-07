@@ -51,7 +51,7 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
    process::start(); Serial.begin( 9600 ); \
    function_t<void>( __VA_ARGS__ )();      \
    process::stop();                        \
-}  void loop(){ /* nothing here */ }
+}  void loop(){ exit(1); }
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -87,7 +87,6 @@ struct generator_t { protected: int _state_ = 0; };
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define forEach( ITEM, CB ) for( auto& x : ITEM ){ CB( x ); }
-#define _( ... ) [=]( __VA_ARGS__ )
 #define forEver() for (;;)
 #define elif else if
 

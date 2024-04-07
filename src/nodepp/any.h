@@ -26,9 +26,9 @@ public: any_t() noexcept {};
     
     /*─······································································─*/
 
-    ulong count() const noexcept { return any_ptr.count(); }
-
-    bool empty()  const noexcept { return any_ptr.null(); }
+    bool has_value() const noexcept { return any_ptr.has_value(); }
+    ulong    count() const noexcept { return any_ptr.count(); }
+    bool     empty() const noexcept { return any_ptr.null(); }
     
     /*─······································································─*/
 
@@ -44,7 +44,7 @@ public: any_t() noexcept {};
 
     template< class T >
     T get() const { 
-        T any; if( any_ptr == nullptr ) 
+        T any; if( any_ptr == nullptr )
             process::error("any is null");
         any_ptr->get((void*)&any); return any; 
     }

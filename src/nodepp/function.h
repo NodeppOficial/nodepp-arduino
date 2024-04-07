@@ -26,9 +26,9 @@ public:
     
     /*─······································································─*/
 
-    ulong count() const noexcept { return func_ptr.count(); }
-
-    bool empty()  const noexcept { return func_ptr.null(); }
+    bool has_value() const noexcept { return func_ptr.has_value(); }
+    ulong    count() const noexcept { return func_ptr.count(); }
+    bool     empty() const noexcept { return func_ptr.null(); }
     
     /*─······································································─*/
 

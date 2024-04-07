@@ -20,25 +20,25 @@
 
 namespace nodepp { namespace promise {
 
-    template< class T, class V > ptr_t<int> resolve( 
+    template< class T, class V > void* resolve( 
         function_t<void,function_t<void,T>,function_t<void,V>> func,
         function_t<void,T> res, function_t<void,V> rej
     ){  ptr_t<int> state = new int(1);
         process::task::add([=](){ func (
             [=]( T data ){ if( *state != 1 ){ return; } res(data); *state = 0; },
             [=]( V data ){ if( *state != 1 ){ return; } rej(data); *state = 0; }
-        ); return -1; }); return state;
+        ); return -1; }); return &state;
     }
 
     /*─······································································─*/
 
-    template< class T > ptr_t<int> resolve( 
+    template< class T > void* resolve( 
         function_t<void,function_t<void,T>> func,
         function_t<void,T> res
     ){  ptr_t<int> state = new int(1);
         process::task::add([=](){ func([=]( T data ){ 
             if( *state != 1 ){ return; } res(data); *state = 0; 
-        }); return -1; }); return state;
+        }); return -1; }); return &state;
     }
 
     /*─······································································─*/
@@ -64,7 +64,7 @@ namespace nodepp { namespace promise {
     
     /*─······································································─*/
 
-    void clear( ptr_t<int>& address ){ if( !address ) *address = 0; }
+    void clear( void* address ){ *((int*)address) = 0; }
 
 }}
 
@@ -75,7 +75,7 @@ protected:
 
     struct NODE {
         function_t<void,function_t<void,T>,function_t<void,V>> main_func;
-        function_t<void,T> res_func; ptr_t<int> addr;
+        function_t<void,T> res_func; void* addr = nullptr;
         function_t<void,V> rej_func; int state;
     };  ptr_t<NODE> obj = new NODE();
 
