@@ -519,21 +519,6 @@ namespace string {
     
     /*─······································································─*/
     
-    template< class T >
-    string_t to_hex( T num ){
-        char buffer[32]; auto x = sprintf( buffer, "%x", num ); 
-        return { buffer, (ulong)x };
-    }
-
-    template< class T >
-    string_t to_bin( T num ){
-        char buffer[sizeof(T)*8]; uint n=sizeof(T)*8-1; do {
-             buffer[n] = num & 1 ? '1' : '0'; num >>= 1;
-        }    while( n-->0 ); return { buffer, sizeof(T)*8 };
-    }
-    
-    /*─······································································─*/
-    
     inline string_t to_string( char* num ){ return num; }
 
     inline string_t to_string( const char* num ){ return num; }
