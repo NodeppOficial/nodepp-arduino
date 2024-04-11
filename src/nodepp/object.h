@@ -68,9 +68,8 @@ private:
 protected: 
 
     struct NODE {
-        int   type = 0;
-        bool   val = 0;
-        any_t  mem;
+        any_t  mem   ;
+        int   type =0;
     };  ptr_t<NODE> obj;
 
 public:
@@ -78,34 +77,32 @@ public:
     template< ulong N > 
     object_t( const T (&arr) [N] ) noexcept : obj(new NODE()) { 
         ARRAY mem; for( ulong x=N; x--; ){ mem.push( arr[x] ); }
-        obj->mem = mem; obj->type = 20; obj->val = 1;
+        obj->mem = mem; obj->type = 20;
     }
 
     template< class U > 
     object_t( const U& any ) noexcept : obj(new NODE()) { 
         obj->type = obj_type_id<U>::value;
-        obj->mem  = any; obj->val = 1;
+        obj->mem  = any;
     }
     
-    object_t() noexcept : obj( new NODE() ) {
-        obj->val = 0;
-    }
+    object_t() noexcept : obj( new NODE() ) {}
 
     /*─······································································─*/
 
     template< class U >
     explicit operator U() const noexcept { return obj->mem.as<U>(); }
 
-    bool has_value() const noexcept { return obj->val; }
+    bool has_value() const noexcept { return obj->mem.has_value(); }
 
     template< class U > 
     U as() const noexcept { return obj->mem.as<U>(); }
 
     /*─······································································─*/
 
-    object_t& operator[]( const string_t& name ) const {
+    object_t& operator[]( const string_t& name ) const noexcept {
         if( !has_value() || obj->type != 20 )
-          { process::error( name, "is not an object" ); }
+          { obj->mem=ARRAY(); obj->type=20; }
 
         auto mem = type::cast<ARRAY>(obj->mem);
         auto x   = mem.first();
@@ -118,7 +115,7 @@ public:
         }    
 
         T item ({ name, object_t() }); mem.push( item ); 
-        obj->mem = mem; obj->type = 20; obj->val = 1; 
+        obj->mem = mem; obj->type = 20;
         return mem.last()->data.second;
     }
 
@@ -135,6 +132,9 @@ public:
     /*─······································································─*/
 
     void erase( const string_t& name ) const noexcept {
+        if( !has_value() || obj->type != 20 )
+          { obj->mem=ARRAY(); obj->type=20; }
+
         auto mem = obj->mem.as<ARRAY>();
         auto x   = mem.first();
 
@@ -145,7 +145,7 @@ public:
 
     }
 
-    void erase() noexcept { obj = new NODE() ; }
+    void erase() noexcept { obj = new NODE(); }
     
 };}
 
