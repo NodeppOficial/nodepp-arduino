@@ -29,12 +29,13 @@
 
 #include "iterator.h"
 #include "console.h"
-#include "event.h"
+#include "sleep.h"
+#include "task.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#include "event.h"
 #include "except.h"
-#include "sleep.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

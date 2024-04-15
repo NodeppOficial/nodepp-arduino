@@ -15,13 +15,12 @@
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #include "import.h"
-#include "task.h"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
 namespace nodepp { namespace process {
 
-    array_t<string_t> args; int threads = 0; 
+    array_t<string_t> args; event_t<> onNext;
 
     /*─······································································─*/
 
@@ -35,65 +34,16 @@ namespace nodepp { namespace process {
 
     /*─······································································─*/
 
-    ulong size(){ 
-        return process::task::size() +
-               process::threads      ; 
-    }
-
-    /*─······································································─*/
-
-    int next(){
-        static int x = 0;   
-    coStart
-        if( process::size() <= 0 ){ 
-            process::delay( TIMEOUT ); coGoto(0); 
-        } while( x-->0 ) { 
-            process::task::next(); coNext; 
-        }   x = process::task::size(); 
-    coStop
-    }
-    
-    /*─······································································─*/
-
-    template< class... T >
-    void* add( const T&... args ){ return process::task::add( args... ); }
-
-    /*─······································································─*/
-
     template< class... T >
     void error( const T&... msg ){ _ERROR( msg... ); }
 
     /*─······································································─*/
 
-    template< class T, class... V > 
-    void await( T cb, const V&... args ){
-        while( cb( args... ) >= 0 )
-             { next(); }
-    }
-    
-    /*─······································································─*/
-
-    void clear(){ 
-        process::task::clear(); 
-        process::threads = 0; 
-    }
-
-    void clear( void* address ){
-         *((bool*)address) = 0;
-    }
-    
-    /*─······································································─*/
-
-    bool empty(){ return ( 
-        process::task::empty() && 
-        process::threads < 1 
-    );}
-    
-    /*─······································································─*/
-
     void stop(){
-        while( !process::empty() )
+        while( !process::empty() ){
                 process::next();
+                onNext.emit();
+        }
     }
 
 }}

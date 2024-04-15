@@ -37,9 +37,9 @@ public: event_t() noexcept : obj( new queue_t<NODE>() ) {}
     void emit( const A&... args ) const noexcept {
         auto x = obj->first(); while( x != nullptr ){
         auto y = x->next; switch( x->data( args... ) ){
-            case  0: obj->erase(x); break;
-            case -1: obj->erase(x); break;
-            case  1:                break;
+            case  0: obj->erase(x);   break;
+            case -1: obj->erase(x);   break;
+            case  1: process::next(); break;
         } x = y; }
     }
     
