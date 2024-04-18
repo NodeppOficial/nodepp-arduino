@@ -63,7 +63,8 @@ namespace nodepp { class object_t {
 private:
 
     using T     = type::pair<string_t,object_t>;
-    using ARRAY = queue_t<T>;
+    using ARRAY = array_t<object_t>;
+    using QUEUE = queue_t<T>;
 
 protected: 
 
@@ -74,9 +75,14 @@ protected:
 
 public:
 
+    object_t( const array_t<object_t>& arr ) noexcept : obj(new NODE()) { 
+        obj->mem = arr; obj->type = 21;
+    }
+
     template< ulong N > 
     object_t( const T (&arr) [N] ) noexcept : obj(new NODE()) { 
-        ARRAY mem; for( ulong x=N; x--; ){ mem.push( arr[x] ); }
+        QUEUE mem; for( ulong x=0; x<N; x++ )
+            { mem.push( arr[x] ); }
         obj->mem = mem; obj->type = 20;
     }
 
@@ -86,7 +92,7 @@ public:
         obj->mem  = any;
     }
     
-    object_t() noexcept : obj( new NODE() ) {}
+    object_t() noexcept : obj(new NODE()) {}
 
     /*─······································································─*/
 
@@ -101,10 +107,10 @@ public:
     /*─······································································─*/
 
     object_t& operator[]( const string_t& name ) const noexcept {
-        if( !has_value() || obj->type != 20 )
-          { obj->mem=ARRAY(); obj->type=20; }
+        if( !has_value() || obj->type != 20  )
+          { obj->mem=QUEUE(); obj->type= 20; }
 
-        auto mem = type::cast<ARRAY>(obj->mem);
+        auto mem = type::cast<QUEUE>(obj->mem);
         auto x   = mem.first();
 
         while( x != nullptr ){ auto y = x->next;
@@ -121,21 +127,37 @@ public:
 
     /*─······································································─*/
 
+    object_t& operator[]( const ulong& idx ) const {
+        if( !has_value() )
+          { process::error("item is empty"); }
+        auto mem = type::cast<ARRAY>(obj->mem);
+        return mem[idx];
+    }
+
+    /*─······································································─*/
+
     array_t<string_t> keys() const noexcept { array_t<string_t> res;
-        if( obj->type == 20 ){ auto mem = obj->mem.as<ARRAY>();
+        if( obj->type == 20 ){ auto mem = obj->mem.as<QUEUE>();
             mem.map([&]( T item ){ res.push( item.first ); });
         }   return res;
     }
 
     int get_type_id() const noexcept { return obj->type; }
 
+    ulong size() const noexcept {
+        if( obj->type == 21 ){ 
+            auto mem = obj->mem.as<ARRAY>();
+            return mem.size();
+        }   return 0;
+    }
+
     /*─······································································─*/
 
     void erase( const string_t& name ) const noexcept {
-        if( !has_value() || obj->type != 20 )
-          { obj->mem=ARRAY(); obj->type=20; }
+        if( !has_value() || obj->type != 20  )
+          { obj->mem=QUEUE(); obj->type= 20; }
 
-        auto mem = obj->mem.as<ARRAY>();
+        auto mem = obj->mem.as<QUEUE>();
         auto x   = mem.first();
 
         while( x != nullptr ) { auto y = x->next;
