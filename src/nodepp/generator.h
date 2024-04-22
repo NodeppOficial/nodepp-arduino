@@ -18,20 +18,18 @@ namespace nodepp { namespace _timer_ {
     GENERATOR( timer ){ public:
 
         template< class V, class... T > 
-        gnEmit( V func, ulong time, ptr_t<ulong> stm, const T&... args ){
+        gnEmit( V func, ulong time, const T&... args ){
         gnStart
-            if( process::millis() <= *stm )  coGoto(0);
-            if( func(args...)<0 )            coEnd;
-            *stm = process::millis() + time; coGoto(0); 
+            coDelay( time ); if( func(args...)<0 )
+            coEnd; coGoto(0); 
         gnStop
         }
 
         template< class V, class... T > 
-        gnEmit( V func, ulong* time, ptr_t<ulong> stm, const T&... args ){
+        gnEmit( V func, ulong* time, const T&... args ){
         gnStart
-            if( process::millis() <= *stm )  coGoto(0);
-            if( func(args...)<0 )            coEnd;
-            *stm = process::millis() +*time; coGoto(0); 
+            coDelay( *time ); if( func(args...)<0 )
+            coEnd; coGoto(0); 
         gnStop
         }
 
@@ -42,20 +40,18 @@ namespace nodepp { namespace _timer_ {
     GENERATOR( utimer ){ public:
 
         template< class V, class... T > 
-        gnEmit( V func, ulong time, ptr_t<ulong> stm, const T&... args ){
+        gnEmit( V func, ulong time, const T&... args ){
         gnStart
-            if( process::micros() <= *stm )  coGoto(0);
-            if( func(args...)<0 )            coEnd;
-            *stm = process::micros() + time; coGoto(0);
+            coUDelay( time ); if( func(args...)<0 )
+            coEnd; coGoto(0);
         gnStop
         }
 
         template< class V, class... T > 
-        gnEmit( V func, ulong* time, ptr_t<ulong> stm, const T&... args ){
+        gnEmit( V func, ulong* time, const T&... args ){
         gnStart
-            if( process::micros() <= *stm )  coGoto(0);
-            if( func(args...)<0 )            coEnd;
-            *stm = process::micros() +*time; coGoto(0);
+            coUDelay( *time ); if( func(args...)<0 )
+            coEnd; coGoto(0);
         gnStop
         }
 

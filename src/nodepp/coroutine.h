@@ -24,6 +24,11 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#define coDelay(VALUE)  do { static auto tm = process::millis()+VALUE; while( process::millis() < tm ){ coNext; } tm = process::millis()+VALUE; break; } while (0)
+#define coUDelay(VALUE) do { static auto tm = process::micros()+VALUE; while( process::micros() < tm ){ coNext; } tm = process::micros()+VALUE; break; } while (0)
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #define coReturn(VALUE) do { _state_ = _LINE_; return VALUE; case _LINE_:; } while (0)
 #define coNext          do { _state_ = _LINE_; return 1;     case _LINE_:; } while (0)
 #define coAgain         do { _state_ = _LINE_; return 0;     case _LINE_:; } while (0)
@@ -33,17 +38,17 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define coStart static int _state_ = 0; { switch(_state_) { case 0:;
-#define coEnd     do { _state_ = 0; return -1; } while (0)
-#define coStop       } _state_ = 0; return -1; }
-#define coSet(VALUE)   _state_ = VALUE
-#define coGet          _state_
+#define coEnd         do { _state_ = 0; return -1; } while (0)
+#define coStop           } _state_ = 0; return -1; }
+#define coSet(VALUE)       _state_ = VALUE
+#define coGet              _state_
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define GENERATOR(NAME) struct NAME : public generator_t
-#define gnStart    { switch(_state_) { case 0:;
-#define gnStop     } _state_ = 0;  return -1; }
-#define gnEmit       int operator()
+#define gnStart   _state_ = 0; { switch(_state_) { case 0:;
+#define gnStop  } _state_ = 0; return -1; }
+#define gnEmit    int operator()
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -70,8 +75,6 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-struct generator_t { protected: int _state_ = 0; };
-
 #define typeof(DATA) (string_t){ typeid( DATA ).name() }
 
 #define ullong  unsigned long long int
@@ -83,6 +86,11 @@ struct generator_t { protected: int _state_ = 0; };
 #define uchar   unsigned char
 #define uint    unsigned int
 #define wchar   wchar_t
+
+struct generator_t { protected: 
+   int _state_ = 0; 
+   ulong tm    = 0;
+};
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

@@ -22,16 +22,14 @@ namespace nodepp { namespace timer {
     
     template< class V, class... T >
     void* add ( V func, ulong* time, const T&... args ){
-        ptr_t<ulong> stm = new ulong( process::millis() + *time ); 
-        auto         prs = _timer_::timer();
-        return process::task::add( prs, func, time, stm, args... ); 
+        auto prs = _timer_::timer();
+        return process::task::add( prs, func, time, args... ); 
     };
     
     template< class V, class... T >
     void* add ( V func, ulong time, const T&... args ){
-        ptr_t<ulong> stm = new ulong( process::millis() + time ); 
-        auto         prs = _timer_::timer();
-        return process::task::add( prs, func, time, stm, args... ); 
+        auto prs = _timer_::timer();
+        return process::task::add( prs, func, time, args... ); 
     };
     
     /*─······································································─*/
@@ -80,16 +78,14 @@ namespace nodepp { namespace utimer {
     
     template< class V, class... T >
     void* add ( V func, ulong* time, const T&... args ){
-        ptr_t<ulong> stm = new ulong( process::micros() +*time );  
-        auto         prs = _timer_::utimer();
-        return process::task::add( prs, func, time, stm, args... ); 
+        auto prs = _timer_::utimer();
+        return process::task::add( prs, func, time, args... ); 
     };
     
     template< class V, class... T >
     void* add ( V func, ulong time, const T&... args ){
-        ptr_t<ulong> stm = new ulong( process::micros() + time );  
-        auto         prs = _timer_::utimer();
-        return process::task::add( prs, func, time, stm, args... ); 
+        auto prs = _timer_::utimer();
+        return process::task::add( prs, func, time, args... ); 
     };
     
     /*─······································································─*/
