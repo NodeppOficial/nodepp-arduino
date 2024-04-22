@@ -75,6 +75,8 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+struct generator_t { protected: int _state_ = 0; };
+
 #define typeof(DATA) (string_t){ typeid( DATA ).name() }
 
 #define ullong  unsigned long long int
@@ -86,11 +88,6 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 #define uchar   unsigned char
 #define uint    unsigned int
 #define wchar   wchar_t
-
-struct generator_t { protected: 
-   int _state_ = 0; 
-   ulong tm    = 0;
-};
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
