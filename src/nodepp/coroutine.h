@@ -46,7 +46,7 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define GENERATOR(NAME) struct NAME : public generator_t
-#define gnStart   _state_ = 0; { switch(_state_) { case 0:;
+#define gnStart { switch(_state_) { case 0:;
 #define gnStop  } _state_ = 0; return -1; }
 #define gnEmit    int operator()
 
@@ -80,9 +80,9 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-struct generator_t { protected: int _state_ = 0; };
-
 #define typeof(DATA) (string_t){ typeid( DATA ).name() }
+
+struct generator_t { protected: int _state_ = 0; };
 
 #define ullong  unsigned long long int
 #define ulong   unsigned long int
