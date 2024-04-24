@@ -134,13 +134,12 @@ protected:
         DONE:
 
             if( (ulong) pos[1] > str.size() ){
-                  if( pos[2] > obj->_rep[1] ){ goto CLSE; }
-                elif( pos[2] >=obj->_rep[0] ){ goto CLSE; } goto FAIL;
+                  goto FAIL;
             } elif( pos[2] == 0 && obj->_rep[0] == 0 ){
                   goto SKIP;
-            } elif( obj->_rep[1] == -1 ){
+            } elif( obj->_rep[1] ==-1 ){
                   if( pos[2] >=obj->_rep[0] ){ goto SKIP; } goto FAIL;
-            } elif( obj->_rep[1] !=  0 ) {
+            } elif( obj->_rep[1] != 0 ) {
                   if( pos[2] > obj->_rep[1] ){ goto NEXT; }
                 elif( pos[2] >=obj->_rep[0] ){ goto NEXT; } goto FAIL;
             } else {
