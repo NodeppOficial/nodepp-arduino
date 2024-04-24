@@ -5,7 +5,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
 
     IO::mode( led, OUTPUT );
 
@@ -14,4 +14,4 @@ onMain([](){
         IO::digital::write( led, b );
     },1000);
 
-})
+}

@@ -24,8 +24,8 @@ _Generator( process_2 ) {
     gnStop }
 };
 
-onMain([](){
+void onMain(){
     process_1 A; process_2 B;
     process::loop::add(A);
     process::loop::add(B);
-})
+}

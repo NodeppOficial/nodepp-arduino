@@ -7,7 +7,7 @@ event_t<> Evento;
 array_t<int> INP ({ 14 });
 array_t<int> OUT ({ 12 }); 
 
-onMain([](){
+void onMain(){
     
     for( auto x : OUT ) IO::mode( x, OUTPUT );
     for( auto x : INP ) IO::mode( x, INPUT );
@@ -26,4 +26,4 @@ onMain([](){
     coStop
     });
     
-})
+}

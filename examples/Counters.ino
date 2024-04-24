@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
 
     timer::add([](){
         static int i = 0; i++;
@@ -11,4 +11,4 @@ onMain([](){
         return ( i >= 10 ) ? -1 : 1;
     }, 1000 );
 
-})
+}

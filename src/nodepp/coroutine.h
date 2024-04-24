@@ -4,7 +4,7 @@
  * Licensed under the MIT (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
  * in the file LICENSE in the source distribution or at
- * https://www.nodepp.xyz/license.html
+ * https://github.com/NodeppOficial/nodepp/blob/main/LICENSE
  */
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -52,16 +52,10 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define onStart init(); void setup(){ \
-   Serial.begin( 9600 ); init();      \
+#define onMain INIT(); void setup(){ \
+   Serial.begin( 9600 ); INIT();      \
 }  void loop(){ process::next(); }
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-#define onMain( ... ) void setup(){   \
-   Serial.begin( 9600 );              \
-   function_t<void>( __VA_ARGS__ )(); \
-}  void loop(){ process::next(); }
+   void INIT
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

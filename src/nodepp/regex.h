@@ -4,7 +4,7 @@
  * Licensed under the MIT (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
  * in the file LICENSE in the source distribution or at
- * https://www.nodepp.xyz/license.html
+ * https://github.com/NodeppOficial/nodepp/blob/main/LICENSE
  */
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -78,7 +78,7 @@ protected:
     /*─······································································─*/
 
     int check_reg_pattern( string_t str, ptr_t<ulong>& off, ptr_t<int>& pos ) const noexcept {
-    //  console::log( (uchar) obj->_data[0], str[pos[1]] );
+    //  console::log( pos[0], (uchar) obj->_data[0], str[pos[1]] );
         
         goto CHCK; MORE: pos[1]++;
 
@@ -133,7 +133,7 @@ protected:
             
         DONE:
 
-            if( (ulong) pos[1] >= str.size() ){
+            if( (ulong) pos[1] > str.size() ){
                   if( pos[2] > obj->_rep[1] ){ goto CLSE; }
                 elif( pos[2] >=obj->_rep[0] ){ goto CLSE; } goto FAIL;
             } elif( pos[2] == 0 && obj->_rep[0] == 0 ){

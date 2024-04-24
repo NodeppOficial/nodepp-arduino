@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
 
     tuple_t< int, float, string_t > tp ( 10, 10.50, "hello world!" );
 
@@ -11,4 +11,4 @@ onMain([](){
     console::log( tuple::get<1>(tp) );
     console::log( tuple::get<2>(tp) );    
 
-})
+}

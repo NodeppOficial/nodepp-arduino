@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
 
     queue_t<int> q ({ 13, 12, 11, 10 });
 
@@ -20,4 +20,4 @@ onMain([](){
         
     }, 100 );
 
-})
+}

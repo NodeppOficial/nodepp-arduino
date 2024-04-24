@@ -3,7 +3,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
     
     timer::interval([=](){
         static int i = 0; i++; i%=1000;
@@ -15,4 +15,4 @@ onMain([](){
         console::done(" time interval 2 - ",i," seconds");
     },500);
 
-})
+}

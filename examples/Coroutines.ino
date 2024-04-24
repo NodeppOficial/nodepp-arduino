@@ -2,7 +2,7 @@
 
 using namespace nodepp;
 
-onMain([](){
+void onMain(){
 
     process::loop::add([=](){ static int itr = 10;
     coStart
@@ -22,4 +22,4 @@ onMain([](){
     coStop
     });
 
-})
+}

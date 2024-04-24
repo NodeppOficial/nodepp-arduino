@@ -1,4 +1,17 @@
+/*
+ * Copyright 2023 The Nodepp Project Authors. All Rights Reserved.
+ *
+ * Licensed under the MIT (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://github.com/NodeppOficial/nodepp/blob/main/LICENSE
+ */
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #pragma once
+
+/*────────────────────────────────────────────────────────────────────────────*/
 
 #define C_BLACK   0x00
 #define C_WHITE   0x01
@@ -9,6 +22,8 @@
 #define C_YELLOW  0x06
 #define C_MAGENTA 0x07
 #define C_BOLD    0x10
+
+/*────────────────────────────────────────────────────────────────────────────*/
 
 namespace nodepp { namespace conio {
 
@@ -94,3 +109,5 @@ namespace nodepp { namespace conio {
     int  warn( const char* msg ){ foreground( C_YELLOW | C_BOLD ); return log( msg ); }
 
 }}
+
+/*────────────────────────────────────────────────────────────────────────────*/
