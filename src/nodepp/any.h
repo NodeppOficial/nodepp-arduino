@@ -42,9 +42,11 @@ public: any_t() noexcept {};
     template< class T >
     void set( const T& f ) noexcept { any_ptr = new any_impl<T>(f); }
 
+    void free() const noexcept { any_ptr.free(); }
+
     template< class T >
     T get() const { 
-        T any; if( any_ptr == nullptr )
+        T any; if( !has_value() )
             process::error("any is null");
         any_ptr->get((void*)&any); return any; 
     }

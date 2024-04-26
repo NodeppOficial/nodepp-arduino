@@ -131,7 +131,7 @@ public:
     /*─······································································─*/
 
     void reset() noexcept {
-        if( value_  == nullptr ){ return; }
+        if( value_ == nullptr ){ return; }
 
         if( count() != 0 )      {
         if( --(*count_) == 0 )  {
@@ -149,11 +149,11 @@ public:
 
     /*─······································································─*/
 
+    bool has_value() const noexcept { return !null() && count()!= 0; }
     ulong     size() const noexcept { return  null() ? 0 : *length_; }
     ulong    count() const noexcept { return  null() ? 0 : *count_;  }
     bool     empty() const noexcept { return  null() || size()==0 ;  }
-    bool      null() const noexcept { return  value_ == nullptr;     }
-    bool has_value() const noexcept { return !null(); }
+    bool      null() const noexcept { return  value_ == nullptr; }
     T*        data() const noexcept { return  value_; }
     T*         get() const noexcept { return  value_; }
     
