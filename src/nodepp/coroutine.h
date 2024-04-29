@@ -52,10 +52,9 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define onMain INIT(); void setup(){ \
-   Serial.begin( 9600 ); INIT();      \
-}  void loop(){ process::next(); }
-   void INIT
+#define onMain                     \
+        loop(){ process::next(); } \
+   void setup
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
