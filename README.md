@@ -29,19 +29,19 @@ void onMain() {
 
 ## FAQ
 - reddit : [/r/Cplusplus/](https://www.reddit.com/r/Cplusplus/comments/19e2kw3/write_asynchronous_code_with_c_nodepp/)
-
+  
 ## Contribution
 
 If you want to contribute to **Nodepp**, you are welcome to do so! You can contribute in several ways:
 
-- Buying me a Coffee
-- Reporting bugs and issues
-- Improving the documentation
-- Adding new features or improving existing ones
-- Writing tests and ensuring compatibility with different platforms
-- Before submitting a pull request, make sure to read the contribution guidelines.
+- ☕ Buying me a Coffee
+- 📢 Reporting bugs and issues
+- 📝 Improving the documentation
+- 📌 Adding new features or improving existing ones
+- 🧪 Writing tests and ensuring compatibility with different platforms
+- 🔍 Before submitting a pull request, make sure to read the contribution guidelines.
 
-NOTE: We don't use STD here
+**NOTE:** We don't use STD here, just Pure C++.
 
 ## License
 
