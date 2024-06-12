@@ -11,6 +11,7 @@
 
 #ifndef NODEPP_ENCODER
 #define NODEPP_ENCODER
+#define BASE64 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -48,7 +49,7 @@ namespace nodepp { namespace encoder { namespace bytes {
     ptr_t<uchar> get( T num ){
         ptr_t<uchar> res ( sizeof(num), 0 );
         for( ulong y=0; y<res.size(); y++ ){
-             res[y] = num >> ( 8*(res.size()-y-1) ); 
+             res[y] = num >> ( 8*(res.size()-y-1) );
         }    return res;
     }
 
@@ -96,7 +97,7 @@ namespace nodepp { namespace encoder { namespace hex {
 
     ptr_t<uchar> set( string_t x ){
         if ( x.empty() ){ return nullptr; }
-        ulong size = x.size() / 2 + ( x.size()%2 ? 0 : 1 ); 
+        ulong size = x.size() / 2 + ( x.size()%2 ? 1 : 0 ); 
         ptr_t<uchar> out ( size ); for ( auto &y : out ){
             string::parse( x.splice(0,2), "%02x", &y );
         }   return out;
@@ -126,7 +127,7 @@ namespace nodepp { namespace encoder { namespace utf8 {
 
     ptr_t<char16_t> to_utf16( string_t inp ){ 
         if( inp.empty() ){ return nullptr; }
-        ptr_t<char16_t> res ( inp.size(), 0 ); 
+        ptr_t<char16_t> res ( inp.size(),0 ); 
         for ( ulong x=0; x<inp.size(); x++ ){ 
             res[x] = type::cast<char16_t>( inp[x] );
         }   return res;
@@ -134,7 +135,7 @@ namespace nodepp { namespace encoder { namespace utf8 {
 
     ptr_t<char32_t> to_utf32( string_t inp ){
         if( inp.empty() ){ return nullptr; }
-        ptr_t<char32_t> res ( inp.size(), 0 ); 
+        ptr_t<char32_t> res ( inp.size(),0 ); 
         for ( ulong x=0; x<inp.size(); x++ ){ 
             res[x] = type::cast<char16_t>( inp[x] );
         }   return res;
@@ -164,7 +165,7 @@ namespace nodepp { namespace encoder { namespace utf16 {
 
     ptr_t<char32_t> to_utf32( ptr_t<char16_t> inp ){
         if( inp.empty() ){ return nullptr; }
-        ptr_t<char32_t> res ( inp.size(), 0 ); 
+        ptr_t<char32_t> res ( inp.size(),0 ); 
         for ( ulong x=0; x<inp.size(); x++ ){ 
             res[x] = type::cast<char32_t>( inp[x] );
         }   return res;
@@ -219,8 +220,6 @@ namespace nodepp { namespace encoder { namespace utf32 {
 
 namespace nodepp { namespace encoder { namespace base64 {
 
-    const string_t base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
     string_t get( const string_t &in ) {
 
         string_t out; int val = 0, valb = -6;
@@ -228,12 +227,12 @@ namespace nodepp { namespace encoder { namespace base64 {
         for ( uchar c: in ) {
             val = ( val  << 8 ) + c; valb += 8;
             while ( valb >= 0 ) {
-                out.push(base64[(val>>valb)&0x3F]);
+                out.push(BASE64[(val>>valb)&0x3F]);
                 valb -= 6;
             }
         }
 
-        if (valb>-6) out.push(base64[((val<<8)>>(valb+8))&0x3F]);
+        if (valb>-6) out.push(BASE64[((val<<8)>>(valb+8))&0x3F]);
         while (out.size()%4){ out.push('='); } return out;
     }
 
@@ -242,7 +241,7 @@ namespace nodepp { namespace encoder { namespace base64 {
         string_t out; int val=0, valb=-8;
         array_t<int> T( 256, -1 );
 
-        for ( int i=0; i<64; i++ ) T[base64[i]] = i;
+        for ( int i=0; i<64; i++ ) T[BASE64[i]] = i;
         for ( uchar c: in ) { if ( T[c]==-1 ) break;
             val = ( val << 6 ) + T[c]; valb += 6;
             if (valb >= 0) {
@@ -258,4 +257,5 @@ namespace nodepp { namespace encoder { namespace base64 {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#undef BASE64
 #endif
