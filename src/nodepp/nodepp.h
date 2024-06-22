@@ -20,20 +20,6 @@
 
 namespace nodepp { namespace process {
 
-    array_t<string_t> args; event_t<> onNext;
-
-    /*─······································································─*/
-
-    void start(){ /* nothing here */ }
-
-    void start( int argc, char** args ){
-        int i=0; do {
-            process::args.push( args[i] );
-        }   while( i ++< argc - 1 ); process::start();
-    }
-
-    /*─······································································─*/
-
     template< class... T >
     void error( const T&... msg ){ _ERROR( msg... ); }
 
@@ -42,7 +28,6 @@ namespace nodepp { namespace process {
     void stop(){
         while( !process::empty() ){
                 process::next();
-                onNext.emit();
         }
     }
 

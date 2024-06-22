@@ -14,7 +14,7 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace nodepp { namespace process { namespace task { 
+namespace nodepp { namespace process { 
     
     queue_t<function_t<int>> queue;
 
@@ -40,38 +40,14 @@ namespace nodepp { namespace process { namespace task {
     } 
 
     void next(){
-        if( queue.empty() ){ return; }
-          auto x = queue.get();
+        if( queue.empty() ){ 
+          process::delay( TIMEOUT );
+          return; 
+        } auto x = queue.get();
           int  y = x->data();
           if ( y == 1 ){ queue.next(); }
         elif ( y <  0 ){ queue.erase( x ); }
     }
-
-}}}
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-namespace nodepp { namespace process { 
-
-    template< class... T >
-    void* add( const T&... args ){ return process::task::add( args... ); }
-
-    ulong size(){ return process::task::size(); }
-
-    /*─······································································─*/
-
-    int next(){
-        static int x = 0;   
-    coStart
-        if( process::size() <= 0 ){ 
-            process::delay( TIMEOUT ); coGoto(0); 
-        } while( x-->0 ) { 
-            process::task::next(); coNext; 
-        }   x = process::task::size(); 
-    coStop
-    }
-
-    /*─······································································─*/
 
     template< class T, class... V > 
     void await( T cb, const V&... args ){
@@ -79,19 +55,6 @@ namespace nodepp { namespace process {
              { next(); }
     }
     
-    /*─······································································─*/
-
-    void clear( void* address ){
-         if( !address ){ return; }
-         *((bool*)address) = 0;
-    }
-    
-    /*─······································································─*/
-    
-    bool empty(){ return process::task::empty(); }
-
-    void clear(){ process::task::clear(); }
-
 }}
 
 /*────────────────────────────────────────────────────────────────────────────*/
