@@ -30,6 +30,7 @@ namespace nodepp { namespace conio {
     /*─······································································─*/
 
     int perr( const string_t& args ){ return Serial.write( args.get(), args.size() ); }
+    
     int pout( const string_t& args ){ return Serial.write( args.get(), args.size() ); }
 
     template< class V, class... T >

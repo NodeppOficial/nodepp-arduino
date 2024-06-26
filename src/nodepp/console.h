@@ -29,6 +29,9 @@ namespace nodepp { namespace console {
     template< class... T >
     int scan( const T&... args ){ return conio::scan( args... ); }
 
+    template< class... T >
+    int pout( const T&... args ){ return conio::log( args... ); }
+
     void enable( long port ){ Serial.begin( port ); }
 
     void wait(){ char x; conio::scan("%c",&x); }
