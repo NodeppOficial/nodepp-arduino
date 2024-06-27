@@ -1,8 +1,5 @@
 # Nodepp-Arduino
 
-<img src="https://github.com/NodeppOficial/nodepp-arduino/assets/109326461/3d427678-9bea-4f71-93a4-37c349a01e22" 
-     width="180px" align="left" style=" padding:10px; " >
-
 **Nodepp** is an innovative open source project that aims to make it easier to create applications in **C++**. This project introduces a high-level abstraction layer that allows developers to write **C++** code in a way that is similar to how they would write code in **NodeJS**. With **Nodepp**, developers can leverage the advantages of the **C++** language while benefiting from the ease of use and flexibility that **NodeJS** offers. This unique combination of features makes **Nodepp** a powerful tool for creating high-performance and scalable applications. Additionally, since it is an open source project, anyone can contribute and improve **Nodepp** to fit their specific needs.
 
 ## Features
