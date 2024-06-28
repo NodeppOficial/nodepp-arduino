@@ -79,7 +79,7 @@ protected:
         
         if( empty() || x == y ){ return nullptr; } if( y>0 ){ y--; }
 
-        if( x < 0 ){ x = last() + x; } if( (ulong)x > last() ){ return nullptr; }
+        if( x < 0 ){ x = size() + x; } if( (ulong)x > last() ){ return nullptr; }
         if( y < 0 ){ y = last() + y; } if( (ulong)y > last() ){ y = last(); } 
                                        if( y < x )            { return nullptr; }
 
@@ -253,15 +253,16 @@ public:
     string_t sort( function_t<bool,char,char> func ) const noexcept {
         queue_t<char> n_buffer;
 
-        for( ulong i=0; i<size(); i++ ){ 
+        for( ulong i=0; i<size(); i++ ){
             auto x = buffer[i]; auto n = n_buffer.first();
-            while( n!=nullptr ){ if( !func( x, n->data ) )
+            while( n!=nullptr ){ 
+               if( !func( x, n->data ) )
                  { n = n->next; continue; } break;
             }      n_buffer.insert( n, x );
         }          n_buffer.push('\0'); 
 
         return n_buffer.data();
-    } 
+    }
     
     /*─······································································─*/
 
