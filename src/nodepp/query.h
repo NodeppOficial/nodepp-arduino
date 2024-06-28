@@ -26,18 +26,18 @@ namespace nodepp {
     namespace query {
 
         query_t parse( string_t data ){
-            if ( data.empty() || data[0] != '?' ){ return query_t(); } query_t null;
+            if ( data.empty() || data[0] != '?' ){ return query_t(); } query_t res;
                  data.shift(); auto args = string::split( data, '&' );
             for( auto x : args ){ 
-                 auto y = regex::match_all( x, "[^=]+" );
-                 if ( y.size() != 2 ){ continue; }
-                 null[ y[0] ] = y[1];
-            }    return null;
+                 auto y = regex::search( x,"[^=]+");
+                 if ( y == nullptr ){ continue; }
+                 res[ x.slice(y[0],y[1]) ] = x.slice(y[1]+1);
+            }    return res;
         }
         
         /*─······································································─*/
         
-        string_t format( const map_t<string_t,string_t>& data ){ 
+        string_t format( const query_t& data ){ 
             array_t<string_t> result; for( auto x:data.data() ) 
                    result.push( x.first + "=" + x.second );
             return string::format("?%s",result.join("&").c_str());
