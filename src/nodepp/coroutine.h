@@ -75,7 +75,6 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 /*────────────────────────────────────────────────────────────────────────────*/
 
 #define typeof(DATA) (string_t){ typeid( DATA ).name() }
-
 struct generator_t { protected: int _state_ = 0; };
 
 #define ullong  unsigned long long int
@@ -90,7 +89,7 @@ struct generator_t { protected: int _state_ = 0; };
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-#define forEach( ITEM, CB ) for( auto& x : ITEM ){ CB( x ); }
+#define forEach( X, ITEM ) for( auto& X : ITEM )
 #define forEver() for (;;)
 #define elif else if
 
