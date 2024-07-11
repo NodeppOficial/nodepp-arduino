@@ -67,10 +67,14 @@ template< class T > T clamp( const T& val, const T& _min, const T& _max ){ retur
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#ifndef MAX_FILENO 
+#define MAX_FILENO 10
+#endif
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #define CHUNK_SIZE 256
 #define UNBFF_SIZE 128
-#define MAX_SOCKET 10
-#define MAX_FILENO 10
 #define TIMEOUT    1
 
 /*────────────────────────────────────────────────────────────────────────────*/
