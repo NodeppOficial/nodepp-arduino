@@ -4,11 +4,19 @@
 
 ## Features
 
-- Open source project, meaning anyone can contribute and improve it
-- Allows writing **C++** code as if writing in **NodeJS** or **Javascript**
-- Adds a high-level abstraction layer to simplify **C++** application development
-- Includes an **Event Loop** that can handle multiple events and tasks on a single thread
-- Supports **Coroutines**, which allows running multiple tasks concurrently on a single thread
+- 📌: Allows writing **C++** code as if writing in **NodeJS** or **Javascript**
+- 📌: Adds a high-level abstraction layer to simplify **C++** application development
+- 📌: Compatible with several platforms like Arduino UNO | Esp8266 | Esp32 | Stm32 Compatible
+- 📌: Supports **Coroutines**, which allows running multiple tasks concurrently on a single thread
+
+## Bateries Included
+
+- 📌: Include a **build-in JSON** parser / stringify system.
+- 📌: Include a **build-in RegExp** engine for processing text strings.
+- 📌: Include a **build-in System** that make every object **Async Task** safety.
+- 📌: Include a **Smart Pointer** base **Garbage Collector** to avoid **Memory Leaks**.
+- 📌: Include support for **Reactive Programming** based on **Events** and **Observers**.
+- 📌: Include an **Event Loop** that can handle multiple events and tasks on a single thread.
 
 ## Hello world
 ```cpp
@@ -22,7 +30,7 @@ void onMain() {
 ```
 
 ## Examples
-- [here](https://github.com/NodeppOficial/nodepp-arduino/tree/main/examples/)
+- [here](https://github.com/NodeppOficial/nodepp/tree/main/examples/)
 
 ## FAQ
 - reddit : [/r/Cplusplus/](https://www.reddit.com/r/Cplusplus/comments/19e2kw3/write_asynchronous_code_with_c_nodepp/)
