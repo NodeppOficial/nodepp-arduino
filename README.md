@@ -6,7 +6,7 @@
 
 - 📌: Allows writing **C++** code as if writing in **NodeJS** or **Javascript**
 - 📌: Adds a high-level abstraction layer to simplify **C++** application development
-- 📌: Compatible with several devices like Arduino UNO | Esp8266 | Esp32 | Stm32 Compatible
+- 📌: Compatible with several devices like Arduino UNO | Esp8266 | Esp32 | Stm32
 - 📌: Supports **Coroutines**, which allows running multiple tasks concurrently on a single thread
 
 ## Bateries Included
