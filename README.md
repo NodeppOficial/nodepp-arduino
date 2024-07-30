@@ -25,9 +25,53 @@
 using namespace nodepp;
 
 void onMain() {
+    console::enable(9600);
     console::log("Hello World!");
 }
 ```
+
+## Events
+```cpp
+#include <nodepp/nodepp.h>
+#include <nodepp/event.h>
+
+using namespace nodepp;
+
+event_t<> ev;
+
+void onMain(){
+
+    pinMode( 13, OUTPUT );
+
+    ev.on([](){
+        static bool b=0; b=!b;
+        digitalWrite( 13, b );
+    });
+
+    ev.emit();
+
+}
+```
+
+## Timer
+```cpp
+#include <nodepp/nodepp.h>
+#include <nodepp/timer.h>
+
+using namespace nodepp;
+
+void onMain(){
+
+    pinMode( 13, OUTPUT );    
+    
+    timer::interval([=](){ 
+        static bool b=0; b=!b;
+        digitalWrite( 13, b );
+    }, 1000 );
+
+}
+```
+
 
 ### More Examples [here](https://github.com/NodeppOficial/Nodepp/tree/main/examples)
 
