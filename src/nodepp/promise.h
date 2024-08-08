@@ -24,7 +24,7 @@ namespace nodepp { namespace promise {
         function_t<void,function_t<void,T>,function_t<void,V>> func,
         function_t<void,T> res, function_t<void,V> rej
     ){  ptr_t<bool> state = new bool(1);
-        process::task::add([=](){ func (
+        process::add([=](){ func (
             [=]( T data ){ if( *state != 1 ){ return; } res(data); *state = 0; },
             [=]( V data ){ if( *state != 1 ){ return; } rej(data); *state = 0; }
         ); return -1; }); return &state;
@@ -36,7 +36,7 @@ namespace nodepp { namespace promise {
         function_t<void,function_t<void,T>> func,
         function_t<void,T> res
     ){  ptr_t<bool> state = new bool(1);
-        process::task::add([=](){ func([=]( T data ){ 
+        process::add([=](){ func([=]( T data ){ 
             if( *state != 1 ){ return; } res(data); *state = 0; 
         }); return -1; }); return &state;
     }
