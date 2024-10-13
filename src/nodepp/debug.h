@@ -18,25 +18,21 @@ namespace nodepp { class debug_t {
 protected: 
 
     struct NODE { 
+        void * ev = nullptr;
         string_t msg;
-        void* ev = nullptr;
     };  ptr_t<NODE> obj;
 
 public: debug_t() noexcept : obj(new NODE()) { }
-    
-    /*─······································································─*/
 
     virtual ~debug_t() noexcept { 
-        if ( obj.count() == 2 ){ 
-	         console::log( obj->msg, "closed" );  
-        }    process::onSIGERR.off( obj->ev );
+        if ( obj.count() == 1 ){ console::log( obj->msg, "closed" ); }
     }
     
     /*─······································································─*/
-    
+
     debug_t( const string_t& msg ) noexcept : obj(new NODE()) {
-        obj->msg = msg; auto inp = type::bind( this );
-        obj->ev  = process::onSIGERR([=](){ inp->error(); });
+        obj->msg = msg; 
+        auto inp = type::bind( this );
 	               console::log( obj->msg, "open" );
     }
     
