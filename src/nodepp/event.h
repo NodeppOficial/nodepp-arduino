@@ -27,6 +27,24 @@ public: event_t() noexcept : obj( new queue_t<NODE>() ) {}
     
     /*─······································································─*/
 
+    void off( void* address ) const noexcept { process::clear( address ); }
+
+    void* once( function_t<void,A...> func ) const noexcept {
+        if( obj->size() >= MAX_EVENTS ) { return nullptr; }
+        ptr_t<bool> out = new bool(1); obj->push([=]( A... args ){
+            if( *out != 0 ){ func( args... ); } return *out;
+        }); return &out;
+    }
+
+    void* on( function_t<void,A...> func ) const noexcept {
+        if( obj->size() >= MAX_EVENTS ) { return nullptr; }
+        ptr_t<bool> out = new bool(1); obj->push([=]( A... args ){
+            if( *out != 0 ){ func( args... ); } return *out;
+        }); return &out;
+    }
+    
+    /*─······································································─*/
+
     bool  empty() const noexcept { return obj->empty(); }
     ulong  size() const noexcept { return obj->size(); }
     void  clear() const noexcept { obj->clear(); }
@@ -38,26 +56,6 @@ public: event_t() noexcept : obj( new queue_t<NODE>() ) {}
         auto y = x->next; 
             if( !x->data( args... ) ){ obj->erase(x); }
         x = y; }
-    }
-    
-    /*─······································································─*/
-
-    void off( void* address ) const noexcept { process::clear( address ); }
-
-    void* once( function_t<void,A...> func ) const noexcept {
-        ptr_t<bool> out = new bool(1);
-        obj->push([=]( A... args ){
-            if( *out != 0 ){ func( args... ); }
-            return *out;
-        }); return &out;
-    }
-
-    void* on( function_t<void,A...> func ) const noexcept {
-        ptr_t<bool> out = new bool(1);
-        obj->push([=]( A... args ){
-            if( *out >= 0 ){ func( args... ); }
-            return *out;
-        }); return &out;
     }
     
 };}

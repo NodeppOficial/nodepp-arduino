@@ -179,7 +179,7 @@ public: array_t() noexcept {};
         for( auto& x : *this ){ if(func(x)) x=targ; } return (*this); 
     }
 
-    string_t copy() const noexcept { return buffer.copy(); }
+    array_t copy() const noexcept { return buffer.copy(); }
     
     /*─······································································─*/
 
