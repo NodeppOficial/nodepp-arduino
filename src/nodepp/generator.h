@@ -11,6 +11,8 @@
 
 #define NODEPP_GENERATOR
 
+/*────────────────────────────────────────────────────────────────────────────*/
+
 #if !defined(GENERATOR_TIMER) && defined(NODEPP_TIMER) && defined(NODEPP_GENERATOR)
     #define  GENERATOR_TIMER
 namespace nodepp { namespace _timer_ {
@@ -62,3 +64,254 @@ namespace nodepp { namespace _timer_ {
 #endif
 
 /*────────────────────────────────────────────────────────────────────────────*/
+
+#if !defined(GENERATOR_FILE) && defined(NODEPP_FILE) && defined(NODEPP_GENERATOR)
+    #define  GENERATOR_FILE
+namespace nodepp { namespace _file_ {
+
+    GENERATOR( read ){ 
+    private:  
+        ulong    d; 
+        ulong*   r; 
+        
+    public: 
+        string_t data ;
+        int      state; 
+
+    template< class T > gnEmit( T* str, ulong size=CHUNK_SIZE ){
+    gnStart state=0; d=0; data.clear(); str->flush();
+
+        if(!str->is_available() ){ coEnd; } r = str->get_range();
+        if(!str->get_borrow().empty() ){ data = str->get_borrow(); }
+
+          if ( r[1] != 0  ){ auto pos = str->pos(); d = r[1]-r[0];
+          if ( pos < r[0] ){ str->del_borrow(); str->pos( r[0] ); }
+        elif ( pos >=r[1] ){ coEnd; } }
+        else { d = str->get_buffer_size(); }
+
+        if( data.empty() ) do {
+            state=str->_read( str->get_buffer_data(), min(d,size) );
+        if( state==-2 ){ coNext; } } while ( state==-2 );
+        
+        if( state > 0 ){
+            data  = string_t( str->get_buffer_data(), (ulong) state );
+        }   state = min( data.size(), size ); str->del_borrow();
+
+        str->set_borrow( data.splice( size, data.size() ) );
+        
+    gnStop
+    }};
+    
+    /*─······································································─*/
+
+    GENERATOR( write ){ 
+    private:
+        string_t b ;
+
+    public:
+        ulong    data ; 
+        int      state;
+        
+    template< class T > gnEmit( T* str, const string_t& msg ){
+    gnStart state=0; data=0; str->flush();
+
+        if(!str->is_available() || msg.empty() ){ coEnd; }
+        if( b.empty() ){ b = msg; }
+        
+        do { do { state=str->_write( b.data()+data, b.size()-data );
+             if ( state==-2 ){ coNext; }
+        } while ( state==-2 ); if( state>0 ){ data += state; }
+        } while ( state>=0 && data<b.size() ); b.clear();
+
+    gnStop
+    }};
+
+    /*─······································································─*/
+
+    GENERATOR( until ){ 
+    private:
+        _file_::read _read;
+        string_t     s;
+
+    public: 
+        string_t  data ;  
+        ulong     state; 
+
+    template< class T > gnEmit( T* str, char ch ){
+    gnStart state=1; s.clear(); data.clear(); str->flush();
+
+        while( str->is_available() ){
+        while( _read(str) == 1 ){ coNext; }
+           if( _read.state<= 0 ){ break; } state = 1; s += _read.data; 
+          for( auto &x: s )     { if( x == ch ){ break; } state++; }
+           if( state<=s.size() ){ break; }
+        }      str->set_borrow(s);
+
+        data = str->get_borrow().splice( 0, state );
+    
+    gnStop
+    }};
+
+    /*─······································································─*/
+
+    GENERATOR( line ){ 
+    private:
+        _file_::read _read;
+        string_t     s;
+
+    public: 
+        string_t  data ;  
+        ulong     state; 
+
+    template< class T > gnEmit( T* str ){
+    gnStart state=1; s.clear(); data.clear(); str->flush();
+
+        while( str->is_available() ){
+        while( _read(str) == 1 ){ coNext; }
+           if( _read.state<= 0 ){ break; } state = 1; s += _read.data; 
+          for( auto &x: s )     { if( x == '\n' ){ break; } state++; }
+           if( state<=s.size() ){ break; }
+        }      str->set_borrow(s);
+
+        data = str->get_borrow().splice( 0, state );
+    
+    gnStop
+    }};
+
+}}
+#undef NODEPP_GENERATOR
+#endif
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+#if !defined(GENERATOR_STREAM) && defined(NODEPP_STREAM) && defined(NODEPP_GENERATOR)
+    #define  GENERATOR_STREAM 
+namespace nodepp { namespace _stream_ {
+
+    GENERATOR( duplex ){ 
+    private:
+
+        _file_::write _write1, _write2;
+        _file_::read  _read1 , _read2;
+
+    public:
+
+        template< class T, class V > gnEmit( const T& inp, const V& out ){
+        gnStart inp.onPipe.emit(); out.onPipe.emit(); coYield(1);
+
+            while( inp.is_available() && out.is_available() ){
+            while( _read1(&inp) ==1 )            { coGoto(2); }
+               if( _read1.state <=0 )            { break;  }
+            while( _write1(&out,_read1.data)==1 ){ coNext; }
+               if( _write1.state<=0 )            { break;  }
+                    inp.onData.emit( _read1.data );
+            }       inp.close(); out.close();
+            
+            coEnd; coYield(2);
+
+            while( inp.is_available() && out.is_available() ){
+            while( _read2(&out) ==1 )            { coGoto(1); }
+               if( _read2.state <=0 )            { break;  }
+            while( _write2(&inp,_read2.data)==1 ){ coNext; }
+               if( _write2.state<=0 )            { break;  }
+                    out.onData.emit( _read2.data );
+            }       out.close(); inp.close();
+
+        gnStop
+        }
+
+    };
+    
+    /*─······································································─*/
+
+    GENERATOR( pipe ){ 
+    private:
+
+        _file_::write _write;
+        _file_::read  _read;
+
+    public:
+
+        template< class T > gnEmit( const T& inp ){
+        gnStart inp.onPipe.emit();
+            while( inp.is_available() ){
+            while( _read(&inp)==1 ){ coNext; }
+               if( _read.state<=0 ){ break;  }
+                    inp.onData.emit( _read.data );
+            }       inp.close(); 
+        gnStop
+        }
+
+        template< class T, class V > gnEmit( const T& inp, const V& out ){
+        gnStart inp.onPipe.emit(); out.onPipe.emit();
+            while( inp.is_available() && out.is_available() ){
+            while( _read(&inp) ==1 )           { coNext; }
+               if( _read.state <=0 )           { break;  }
+            while( _write(&out,_read.data)==1 ){ coNext; }
+               if( _write.state<=0 )           { break;  }
+                    inp.onData.emit( _read.data );
+            }       inp.close(); out.close();
+        gnStop
+        }
+
+    };
+    
+    /*─······································································─*/
+
+    GENERATOR( line ){ 
+    private:
+
+        _file_::write _write;
+        _file_::line  _read;
+
+    public:
+
+        template< class T > gnEmit( const T& inp ){
+        gnStart inp.onPipe.emit();
+            while( inp.is_available() ){
+            while( _read(&inp)==1 ){ coNext; } 
+               if( _read.state<=0 ){ break;  }
+                   inp.onData.emit( _read.data );
+            }      inp.close(); 
+        gnStop
+        }
+
+        template< class T, class V > gnEmit( const T& inp, const V& out ){
+        gnStart inp.onPipe.emit(); out.onPipe.emit();
+            while( inp.is_available() && out.is_available() ){
+            while( _read(&inp)==1 )            { coNext; } 
+               if( _read.state<=0 )            { break;  }
+            while( _write(&out,_read.data)==1 ){ coNext; }
+               if( _write.state<=0 )           { break;  }
+                    inp.onData.emit( _read.data );
+            }       inp.close(); out.close();
+        gnStop
+        }
+
+    };
+    
+}}
+#undef NODEPP_GENERATOR
+#endif
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+#if !defined(GENERATOR_POLL) && defined(NODEPP_SOCKET) && defined(NODEPP_GENERATOR)
+    #define  GENERATOR_POLL
+namespace nodepp { namespace _poll_ {
+
+    GENERATOR( poll ){ public:
+
+        template< class V, class T, class U > 
+        gnEmit( V ctx, T self, U cb ){
+            if( ctx.is_closed() ){ return -1; }
+        gnStart coNext;
+            self->onSocket.emit( ctx ); cb(ctx);
+        gnStop
+        }
+
+    };
+
+}}  
+#undef NODEPP_GENERATOR
+#endif
