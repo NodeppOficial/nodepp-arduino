@@ -76,7 +76,7 @@ void onMain(){
 ### More Examples [here](https://github.com/NodeppOficial/Nodepp/tree/main/examples)
 
 ## FAQ
-- reddit : [/r/Nodepp/](https://www.reddit.com/r/Nodepp/comments/1eaq1pu/faq_ask_anything_about_nodepp/)
+- 🔗: [/r/Nodepp/](https://www.reddit.com/r/Nodepp/comments/1eaq1pu/faq_ask_anything_about_nodepp/)
   
 ## Contribution
 
