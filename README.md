@@ -75,8 +75,13 @@ void onMain(){
 
 ### More Examples [here](https://github.com/NodeppOficial/Nodepp/tree/main/examples)
 
+## Compatibility
+- 🔗: [NodePP for Window | Linux | Mac | Bsd ](https://github.com/NodeppOficial/nodepp)
+- 🔗: [NodePP for Arduino](https://github.com/NodeppOficial/nodepp-arduino)
+- 🔗: [Nodepp for WASM](https://github.com/NodeppOficial/nodepp-wasm)
+ 
 ## FAQ
-- 🔗: [/r/Nodepp/](https://www.reddit.com/r/Nodepp/comments/1eaq1pu/faq_ask_anything_about_nodepp/)
+- 🔗 : [/r/Nodepp/](https://www.reddit.com/r/Nodepp/comments/1eaq1pu/faq_ask_anything_about_nodepp/)
   
 ## Contribution
 
