@@ -54,6 +54,8 @@ void onMain(){
     ev.emit();
 
 }
+
+// note that we are using onMain() instead of main()
 ```
 
 ## Timer
