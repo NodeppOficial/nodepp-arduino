@@ -31,9 +31,9 @@ namespace nodepp { namespace process {
 
     void  delay( ulong time ){ ::delay( time ); }
 
-    ulong now(){ return millis(); }
+    void  yield(){ ::delay(TIMEOUT); }
 
-    void  yield(){ ::delay(0); }
+    ulong now(){ return millis(); }
 
 }}
 

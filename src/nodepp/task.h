@@ -44,7 +44,7 @@ namespace nodepp { namespace process {
     } 
 
     void next(){
-        if( queue.empty() ){ process::delay( TIMEOUT ); return; } 
+        if( queue.empty() ){ process::yield(); return; } 
           auto x = queue.get(); int y = x->data();
           if ( y == 1 ){ queue.next( ); }
         elif ( y <  0 ){ queue.erase( x ); }
