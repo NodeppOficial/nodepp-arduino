@@ -58,6 +58,7 @@ protected:
         elif( data[x] == '['     ){ return parse( data ); }
         elif( data.find("false") ){ return (bool) 0; }
         elif( data.find("true")  ){ return (bool) 1; }
+        elif( data.find("null")  ){ return nullptr;  }
         elif( data.find('.')     ){ return string::to_float(data); }
         elif( string::is_alpha( data[x] ) ){ return data; }
         else{ return string::to_int( data ); } 
@@ -192,7 +193,7 @@ public: json_t () noexcept = default;
             case 0xf710: return string::format("[%s]",obj.as<array_t<double>>().join().get());   break;
             case 0xf711: return string::format("[%s]",obj.as<array_t<ldouble>>().join().get());  break;
 
-            default: return nullptr; break;
+            default: return "null"; break;
         }
 
         END:; return result;
