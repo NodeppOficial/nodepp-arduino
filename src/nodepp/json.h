@@ -51,10 +51,11 @@ protected:
     }
 
     object_t get_data( const string_t& data ) const noexcept {
-        ulong x=0; while( data[x]==' ' ){ x++; }
-          if( data[x] == '"' ){ return regex::match(data,"\"[^\"]+\"").slice(1,-1); }
-        elif( data[x] == '{' ){ return parse( data ); }
-        elif( data[x] == '[' ){ return parse( data ); }
+        ulong x=0; while( x < data.size() && data[x]==' ' ){ x++; }
+          if( data.empty() || data[x] == ',' ){ return nullptr; }
+        elif( data[x] == '"'     ){ return regex::match(data,"\"[^\"]+\"").slice(1,-1); }
+        elif( data[x] == '{'     ){ return parse( data ); }
+        elif( data[x] == '['     ){ return parse( data ); }
         elif( data.find("false") ){ return (bool) 0; }
         elif( data.find("true")  ){ return (bool) 1; }
         elif( data.find('.')     ){ return string::to_float(data); }
