@@ -83,6 +83,7 @@ void onMain(){
 ## Compatibility
 - 🔗: [NodePP for Window | Linux | Mac | Bsd ](https://github.com/NodeppOficial/nodepp)
 - 🔗: [NodePP for Arduino](https://github.com/NodeppOficial/nodepp-arduino)
+- 🔗: [Nodepp for ESP32](https://github.com/NodeppOficial/nodepp-ESPXX)
 - 🔗: [Nodepp for WASM](https://github.com/NodeppOficial/nodepp-wasm)
  
 ## FAQ
