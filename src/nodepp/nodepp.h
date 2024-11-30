@@ -26,9 +26,8 @@ namespace nodepp { namespace process {
     /*─······································································─*/
 
     void stop(){
-        while( !process::empty() ){
-                process::next();
-        }
+        while( !process::empty() )
+             {  process::next(); }
     }
 
 }}
