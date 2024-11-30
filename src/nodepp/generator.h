@@ -74,14 +74,14 @@ namespace nodepp { namespace _promise_ {
         template< class T, class U, class V > 
         coEmit( ptr_t<bool> state, const T& func, const U& res, const V& rej ){
         gnStart
-            func( res, rej ); while( *state!=0 ) { coNext; }
+            func( res, rej ); while( *state==1 ) { coNext; }
         gnStop
         }
 
         template< class T, class U > 
         coEmit( ptr_t<bool> state, const T& func, const U& res ){
         gnStart
-            func( res ); while( *state!=0 ) { coNext; }
+            func( res ); while( *state==1 ) { coNext; }
         gnStop
         }
 
