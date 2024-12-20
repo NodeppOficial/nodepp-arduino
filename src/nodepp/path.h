@@ -111,12 +111,21 @@ namespace _path_ { map_t<string_t,string_t> mimetype ({
 namespace path {
 
 namespace {
+#if false // _KERNEL == NODEPP_KERNEL_WINDOWS
+    string_t sep  = "\\\\";
+    string_t root = "c:\\\\";
+    string_t  one = "[^\\\\]+";
+    string_t init = "\\w:\\\\";
+    string_t _beg = "\\w:\\\\";
+    string_t  beg = "^\\w:\\\\";
+#else
     string_t init = "";
     string_t  sep = "/";
     string_t _beg = "/";
     string_t root = "./";
     string_t  beg = "^/";
     string_t  one = "[^/]+";
+#endif
 }
     
     /*─······································································─*/
@@ -181,7 +190,7 @@ namespace {
 
     string_t basename( const string_t& path ){ 
         auto vec = regex::match_all( path, one );
-        if ( vec.empty() ){ return ""; }
+        if ( vec.empty() ){ return nullptr; }
         return vec[ vec.last() ];
     }
     
@@ -189,7 +198,7 @@ namespace {
 
     string_t basename( const string_t& path, const string_t& del ){ 
         auto vec = regex::match_all( path, one );
-        if ( vec.empty() ){ return ""; }
+        if ( vec.empty() ){ return nullptr; }
         return regex::replace( vec[ vec.last() ], del, "" );
     }
 
