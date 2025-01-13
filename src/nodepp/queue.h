@@ -22,8 +22,6 @@ protected:
         NODE* next = nullptr;
         NODE* prev = nullptr; V data; 
         NODE( V value ){ data = value; } 
-        V get() noexcept { return data; }
-        explicit operator V(){ return data; }
     };
     
     NODE *act = nullptr, *lst = nullptr;
@@ -209,6 +207,15 @@ public: queue_t() noexcept {}
     }
 
     /*─······································································─*/
+    
+    bool is_item( NODE* item ) const noexcept {
+        auto n = first(); while( n!=nullptr ){
+         if( n == item ){ return true; } 
+             n = n->next;
+        }    return false;
+    }
+
+    /*─······································································─*/
 
     void unshift( const V& value ) noexcept { insert( first(), value ); }
     void    push( const V& value ) noexcept { insert( nullptr, value ); }
@@ -241,27 +248,27 @@ public: queue_t() noexcept {}
             { insert( x, value[x] ); }
     }
 
-    void insert( NODE* index, const V& value ) noexcept {
+    void insert( NODE* n, const V& value ) noexcept {
         if( empty() ){
             queue = new NODE( value ); lst = &queue;
-        } elif ( index != nullptr ) { 
-            if ( index == first() ) {
+        } elif ( is_item(n) ) { 
+            if ( n == first() ) {
                 auto   prev = *queue; queue = new NODE( value );
                 queue->next = new NODE( prev ); queue->next->prev =&queue;
                 if( prev.next != nullptr ){ prev.next->prev = queue->next; }
                 if( prev.next == nullptr ){ lst = queue->next; }
             } else {
-                 auto   next = index->prev; index = new NODE( value );
-            if ( next->next != nullptr ){ next->next->prev =index; }
-                 index->next = next->next; index->prev = next;
-            if ( index->next== nullptr ){ lst = index; }
-                 next->next  = index;
+                 auto   next = n->prev; n = new NODE( value );
+            if ( next->next != nullptr ){ next->next->prev =n; }
+                 n->next = next->next; n->prev = next;
+            if ( n->next== nullptr ){ lst = n; }
+                 next->next  = n;
             }
         } else { auto prev = last();
             prev->next = new NODE( value );
             prev->next->prev = prev;
             lst = prev->next;
-        }   *length += 1;
+        }  *length += 1;
     }
     
     /*─······································································─*/
@@ -280,20 +287,21 @@ public: queue_t() noexcept {}
 
     void erase( NODE* n ) noexcept {
         if( empty() )                { return; }
-        if( n == nullptr )           { n = last(); }
+        if(!is_item(n) )             { n = last(); }
         if( n->next == nullptr )     { lst= n->prev; }
         if( n == act ){ next(); } if ( n == first() ) {
             if ( n->next != nullptr ){ n->next->prev = nullptr; }
-                 n->prev = nullptr; queue = n->next; 
+                 n->prev = nullptr; queue = n->next;
         } else {
             if ( n->prev != nullptr ){ n->prev->next = n->next; }
-            if ( n->next != nullptr ){ n->next->prev = n->prev; } delete n;
+            if ( n->next != nullptr ){ n->next->prev = n->prev; } 
+                 delete n;
         }   *length -= 1; 
     }
 
     /*─······································································─*/
 
-    void set( NODE* x ) noexcept { if ( x != nullptr ) act = x; }
+    void set( NODE* x ) noexcept { if ( is_item(x) ) act = x; }
 
     NODE* get() noexcept { return act==nullptr ? first() : act; }
 

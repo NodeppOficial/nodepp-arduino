@@ -40,7 +40,7 @@ protected:
 
         if( x < 0 ){ x = last() + x; } if( (ulong)x > last() ){ return nullptr; }
             y += x - 1;
-        if( y > last() ){ y= last(); } if( y < (ulong)x ){ return nullptr; }
+        if( y > last() ){ y= last(); } if( y < (ulong)x )     { return nullptr; }
 
         ulong a = clamp( first() + y, 0UL, last() );
         ulong b = clamp( first() + x, 0UL, a ); 
