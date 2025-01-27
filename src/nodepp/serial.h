@@ -1,0 +1,164 @@
+/*
+ * Copyright 2023 The Nodepp Project Authors. All Rights Reserved.
+ *
+ * Licensed under the MIT (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://github.com/NodeppOficial/nodepp/blob/main/LICENSE
+ */
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+#ifndef NODEPP_SERIAL
+#define NODEPP_SERIAL
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace nodepp { class serial_t {
+protected:
+
+    struct NODE {
+        int          state = 0;
+        int          feof  = 1;
+        ptr_t<char>  buffer;
+        string_t     borrow;
+    };  ptr_t<NODE> obj = new NODE();
+
+public: serial_t() noexcept {}
+
+    event_t<>          onUnpipe;
+    event_t<>          onResume;
+    event_t<except_t>  onError;
+    event_t<>          onDrain;
+    event_t<>          onClose;
+    event_t<>          onStop;
+    event_t<>          onOpen;
+    event_t<>          onPipe;
+    event_t<string_t>  onData;
+    
+    /*─······································································─*/
+    
+    virtual ~serial_t() noexcept { if( obj.count() > 1 ){ return; } free(); }
+    
+    /*─······································································─*/
+
+    serial_t( const uchar& port, const ulong& _size=CHUNK_SIZE ){
+        Serial.begin( port ); set_buffer_size( _size ); 
+    }
+
+    /*─······································································─*/
+
+    bool    is_available() const noexcept { return obj->state >= 0 && !is_closed(); }
+    bool       is_closed() const noexcept { return obj->state <  0 ||  is_feof(); }
+    virtual bool is_feof() const noexcept { return obj->feof  == 0; }
+
+    /*─······································································─*/
+    
+    void resume() const noexcept { if(obj->state== 0) { return; } obj->state= 0; onResume.emit(); }
+    void  close() const noexcept { if(obj->state < 0) { return; } obj->state=-1; onDrain.emit();  }
+    void   stop() const noexcept { if(obj->state==-3) { return; } obj->state=-3; onStop.emit();   }
+    void  reset() const noexcept { if(obj->state!=-2) { return; } resume(); pos(0); }
+    void  flush() const noexcept { obj->buffer.fill(0); }
+    
+    /*─······································································─*/
+
+    void   set_range( ulong /*unused*/, ulong /*unused*/ ) const noexcept { }
+    ulong* get_range() const noexcept { return nullptr; }
+    int       get_fd() const noexcept { return 1; }
+
+    int    get_state() const noexcept { return obj == nullptr ? -1 : obj->state; }
+    
+    /*─······································································─*/
+
+    void   set_borrow( const string_t& brr ) const noexcept { obj->borrow = brr; }
+    ulong  get_borrow_size() const noexcept { return obj->borrow.size(); }
+    char*  get_borrow_data() const noexcept { return obj->borrow.data(); }
+    void        del_borrow() const noexcept { obj->borrow.clear(); }
+    string_t&   get_borrow() const noexcept { return obj->borrow; }
+    
+    /*─······································································─*/
+
+    ulong   get_buffer_size() const noexcept { return obj->buffer.size(); }
+    char*   get_buffer_data() const noexcept { return obj->buffer.data(); }
+    ptr_t<char>& get_buffer() const noexcept { return obj->buffer; }
+    
+    /*─······································································─*/
+
+    ulong size() const noexcept { return -1; }
+    
+    /*─······································································─*/
+
+    virtual ulong set_buffer_size( ulong _size ) const noexcept { 
+        obj->buffer = ptr_t<char>( _size ); return _size;
+    }
+    
+    /*─······································································─*/
+    
+    virtual void free() const noexcept {
+        if( obj->state == -3 && obj.count() > 1 ){ resume(); return; }
+        if( obj->state == -2 ){ return; } close(); obj->state = -2;
+        Serial.end(); onClose.emit();
+    }
+
+    /*─······································································─*/
+
+    ulong pos( ulong _pos ) const noexcept { return 0; }
+    ulong pos() const noexcept { return 0; }
+    
+    /*─······································································─*/
+
+    char read_char() const noexcept { return read(1)[0]; }
+
+    string_t read_line() const noexcept {
+        auto gen = nodepp::_file_::line();
+        while( gen( this ) == 1 )
+             { process::next(); }
+        return gen.data;
+    }
+    
+    /*─······································································─*/
+
+    string_t read( ulong size=CHUNK_SIZE ) const noexcept {
+        auto gen = nodepp::_file_::read();
+        while( gen( this, size ) == 1 )
+             { process::next(); }
+        return gen.data;
+    }
+
+    ulong write( const string_t& msg ) const noexcept {
+        auto gen = nodepp::_file_::write();
+        while( gen( this, msg ) == 1 )
+             { process::next(); }
+        return gen.data;
+    }
+    
+    /*─······································································─*/
+
+    virtual int _read( char* bf, const ulong& sx ) const noexcept {
+        if( is_closed() ){ return -1; } if( sx==0 ){ return 0; }
+        if(!Serial.available() ){ return -2; } 
+
+        char x = 0; obj->feof = 0;
+
+        do { x = Serial.read();
+        if ( sx==obj->feof ){ break; }
+        if ( x == -1 )      { break; }
+             bf[obj->feof] = x;
+             obj->feof++;
+        } while( true );
+
+        Serial.flush(); return obj->feof;
+    }
+
+    virtual int _write( char* bf, const ulong& sx ) const noexcept {
+        if( is_closed() ){ return -1; } if( sx==0 ){ return 0; }
+        if(!Serial.availableForWrite() ){ return -2; }
+        obj->feof= Serial.write( bf, sx );
+        Serial.flush(); return obj->feof;
+    }
+
+};}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+#endif
