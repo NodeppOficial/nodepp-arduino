@@ -261,6 +261,7 @@ namespace nodepp { namespace _stream_ {
     public:
 
         template< class T, class V > coEmit( const T& inp, const V& out ){
+            if( inp.is_closed() || out.is_closed() ){ return -1; }
         gnStart inp.onPipe.emit(); out.onPipe.emit(); coYield(1);
 
             while( inp.is_available() && out.is_available() ){
@@ -297,6 +298,7 @@ namespace nodepp { namespace _stream_ {
     public:
 
         template< class T > coEmit( const T& inp ){
+            if( inp.is_closed() ){ return -1; }
         gnStart inp.onPipe.emit();
             while( inp.is_available() ){
             while( _read(&inp)==1 ){ coNext; }
@@ -307,6 +309,7 @@ namespace nodepp { namespace _stream_ {
         }
 
         template< class T, class V > coEmit( const T& inp, const V& out ){
+            if( inp.is_closed() || out.is_closed() ){ return -1; }
         gnStart inp.onPipe.emit(); out.onPipe.emit();
             while( inp.is_available() && out.is_available() ){
             while( _read(&inp) ==1 )           { coNext; }
@@ -331,6 +334,7 @@ namespace nodepp { namespace _stream_ {
     public:
 
         template< class T > coEmit( const T& inp ){
+            if( inp.is_closed() ){ return -1; }
         gnStart inp.onPipe.emit();
             while( inp.is_available() ){
             while( _read(&inp)==1 ){ coNext; } 
@@ -341,6 +345,7 @@ namespace nodepp { namespace _stream_ {
         }
 
         template< class T, class V > coEmit( const T& inp, const V& out ){
+            if( inp.is_closed() || out.is_closed() ){ return -1; }
         gnStart inp.onPipe.emit(); out.onPipe.emit();
             while( inp.is_available() && out.is_available() ){
             while( _read(&inp)==1 )            { coNext; } 
