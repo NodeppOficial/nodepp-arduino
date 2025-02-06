@@ -14,6 +14,12 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+#include "file.h"
+#include "event.h"
+#include "generator.h"
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace nodepp { class serial_t {
 protected:
 
@@ -134,7 +140,13 @@ public: serial_t() noexcept {}
     
     /*─······································································─*/
 
-    virtual int _read( char* bf, const ulong& sx ) const noexcept {
+    virtual int _read( char* bf, const ulong& sx )  const noexcept { return __read( bf, sx ); }
+
+    virtual int _write( char* bf, const ulong& sx ) const noexcept { return __write( bf, sx ); }
+    
+    /*─······································································─*/
+
+    virtual int __read( char* bf, const ulong& sx ) const noexcept {
         if( is_closed() ){ return -1; } if( sx==0 ){ return 0; }
         if(!Serial.available() ){ return -2; } 
 
@@ -150,11 +162,29 @@ public: serial_t() noexcept {}
         Serial.flush(); return obj->feof;
     }
 
-    virtual int _write( char* bf, const ulong& sx ) const noexcept {
+    virtual int __write( char* bf, const ulong& sx ) const noexcept {
         if( is_closed() ){ return -1; } if( sx==0 ){ return 0; }
         if(!Serial.availableForWrite() ){ return -2; }
         obj->feof= Serial.write( bf, sx );
         Serial.flush(); return obj->feof;
+    }
+
+    /*─······································································─*/
+
+    bool _write_( char* bf, const ulong& sx, ulong& sy ) const noexcept {
+        if( sx==0 || is_closed() ){ return 1; } while( sy < sx ) {
+            int c = __write( bf+sy, sx-sy );
+            if( c <= 0 && c != -2 )          { return 0; }
+            if( c >  0 ){ sy += c; continue; } return 1;
+        }   return 0;
+    }
+
+    bool _read_( char* bf, const ulong& sx, ulong& sy ) const noexcept {
+        if( sx==0 || is_closed() ){ return 1; } while( sy < sx ) {
+            int c = __read( bf+sy, sx-sy );
+            if( c <= 0 && c != -2 )          { return 0; }
+            if( c >  0 ){ sy += c; continue; } return 1;
+        }   return 0;
     }
 
 };}
